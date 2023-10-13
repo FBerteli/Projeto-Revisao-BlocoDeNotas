@@ -1,0 +1,403 @@
+Index: .idea/csv-editor.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/csv-editor.xml b/.idea/csv-editor.xml
+new file mode 100644
+--- /dev/null	(date 1697163190235)
++++ b/.idea/csv-editor.xml	(date 1697163190235)
+@@ -0,0 +1,23 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CsvFileAttributes">
++    <option name="attributeMap">
++      <map>
++        <entry key="C:\Users\vag\IdeaProjects\untitled\DistanciasCidadesCSV.csv">
++          <value>
++            <Attribute>
++              <option name="separator" value=";" />
++            </Attribute>
++          </value>
++        </entry>
++        <entry key="\Projeto-Teste-BlocoDeNotas\DistanciasCidadesCSV.csv">
++          <value>
++            <Attribute>
++              <option name="separator" value=";" />
++            </Attribute>
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'java'\r\n}\r\n\r\ngroup = 'org.example'\r\nversion = '1.0-SNAPSHOT'\r\n\r\nrepositories {\r\n    mavenCentral()\r\n}\r\n\r\ndependencies {\r\n    testImplementation platform('org.junit:junit-bom:5.9.1')\r\n    testImplementation 'org.junit.jupiter:junit-jupiter'\r\n}\r\n\r\ntest {\r\n    useJUnitPlatform()\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/build.gradle b/Projeto-Teste-BlocoDeNotas/build.gradle
+--- a/Projeto-Teste-BlocoDeNotas/build.gradle	(revision 63cb77efd33cecdb234fb458d31afccab6b42155)
++++ b/Projeto-Teste-BlocoDeNotas/build.gradle	(date 1697163190268)
+@@ -12,6 +12,10 @@
+ dependencies {
+     testImplementation platform('org.junit:junit-bom:5.9.1')
+     testImplementation 'org.junit.jupiter:junit-jupiter'
++    implementation 'org.apache.commons:commons-csv:1.8'
++    implementation 'com.google.maps:google-maps-services:0.15.0'
++    implementation 'org.slf4j:slf4j-api:1.7.32'
++    implementation 'ch.qos.logback:logback-classic:1.2.6'
+ }
+ 
+ test {
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java b/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java
+new file mode 100644
+--- /dev/null	(date 1697163441425)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java	(date 1697163441425)
+@@ -0,0 +1,63 @@
++package Cidade;
++
++import com.google.maps.DistanceMatrixApi;
++import com.google.maps.DistanceMatrixApiRequest;
++import com.google.maps.GeoApiContext;
++import com.google.maps.model.Distance;
++import com.google.maps.model.DistanceMatrix;
++import com.google.maps.model.TravelMode;
++
++import java.io.BufferedReader;
++import java.io.FileReader;
++import java.io.IOException;
++import java.util.Scanner;
++
++public class CalculoDistancia {
++    public static void main(String[] args) throws Exception {
++        // Inicialize o contexto da API do Google Maps com sua chave
++        GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms").build();
++
++        // Lê o arquivo CSV e obtém a primeira linha
++        String[] availableCities = readCSVHeader("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
++
++        // Mostra as cidades disponíveis
++        System.out.println("Cidades disponíveis:");
++        for (String city : availableCities) {
++            System.out.println(city);
++        }
++
++        // Solicita ao usuário que selecione duas cidades
++        Scanner scanner = new Scanner(System.in);
++        System.out.print("Selecione a primeira cidade: ");
++        String city1 = scanner.nextLine();
++        System.out.print("Selecione a segunda cidade: ");
++        String city2 = scanner.nextLine();
++
++        // Solicita ao usuário que selecione o tipo de caminhão
++        System.out.print("Selecione o tipo de caminhão (por exemplo, 'DRIVING'): ");
++        String truckType = scanner.nextLine();
++
++        // Usa a API do Google Maps para calcular a distância
++        DistanceMatrixApiRequest request = DistanceMatrixApi.newRequest(context);
++        DistanceMatrix distanceMatrix = request.origins(city1)
++                .destinations(city2)
++                .mode(TravelMode.valueOf(truckType))
++                .await();
++
++        // A resposta inclui a distância em metros e outras informações
++        Distance distance = distanceMatrix.rows[0].elements[0].distance;
++        System.out.println("Distância entre " + city1 + " e " + city2 + ": " + distance.humanReadable);
++    }
++
++    // Função para ler o cabeçalho do arquivo CSV e retornar a lista de cidades disponíveis
++    private static String[] readCSVHeader(String csvFilePath) throws IOException {
++        String[] cities = null;
++        BufferedReader br = new BufferedReader(new FileReader(csvFilePath));
++        String line;
++        if ((line = br.readLine()) != null) {
++            cities = line.split(";");
++        }
++        br.close();
++        return cities;
++    }
++}
+Index: Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv b/Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv
+new file mode 100644
+--- /dev/null	(date 1697163190300)
++++ b/Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv	(date 1697163190300)
+@@ -0,0 +1,25 @@
++ARACAJU;BELEM;BELO HORIZONTE;BRASILIA;CAMPO GRANDE;CUIABA;CURITIBA;FLORIANOPOLIS;FORTALEZA;GOIANIA;JOAO PESSOA;MACEIO;MANAUS;NATAL;PORTO ALEGRE;PORTO VELHO;RECIFE;RIO BRANCO;RIO DE JANEIRO;SALVADOR;SAO LUIS;SAO PAULO;TERESINA;VITORIA
++0;2079;1578;1652;2765;2775;2595;2892;1183;1848;611;294;5215;788;3296;4230;501;4763;1855;356;1578;2187;1142;1408
++2079;0;2824;2120;2942;2941;3193;3500;1610;2017;2161;2173;5298;2108;3852;4397;2074;4931;3250;2100;806;2933;947;3108
++1578;2824;0;716;1453;1594;1004;1301;2528;906;2171;1854;3951;2348;1712;3050;2061;3584;434;1372;2738;586;2302;524
++1650;2140;741;0;1134;1133;1366;1673;2200;209;2245;1930;3490;2422;2027;2589;2135;3123;1148;1446;2157;1015;1789;1239
++2764;2942;1453;1134;0;694;991;1298;3407;935;3357;3040;3051;3534;1518;2150;3247;2684;1444;2568;2979;1014;2911;1892
++2773;2941;1594;1133;694;0;1679;1986;3406;934;3366;3049;2357;3543;2206;1456;3255;1990;2017;2566;2978;1614;2910;2119
++2595;3193;1004;1366;991;1679;0;300;3541;1186;3188;2871;4036;3365;711;3135;3078;3669;852;2385;3230;408;3143;1300
++2892;3500;1301;1673;1298;1986;300;0;3838;1493;3485;3168;4443;3662;476;3442;3375;3976;1144;2682;3537;705;3450;1597
++1183;1611;2528;2208;3407;3406;3541;3838;0;2482;688;1075;5763;537;4242;4862;800;5396;2805;1389;1070;3127;634;2397
++1849;2017;906;209;935;934;1186;1493;2482;0;2442;2125;3291;2618;1847;2390;2332;2924;1338;1643;2054;926;1986;1428
++611;2161;2171;2245;3357;3366;3188;3485;688;2442;0;395;5808;185;3889;4822;120;5356;2448;949;1660;2770;1224;2001
++294;2173;1854;1928;3040;3049;2871;3168;1075;2105;395;0;5491;572;3572;4505;285;5039;2131;632;1672;2453;1236;1684
++5215;5298;3951;3490;3051;2357;4036;4343;5763;3291;5808;5491;0;5985;4563;901;5698;1445;4374;5009;5335;3971;5267;4476
++788;2108;2348;2422;3537;3543;3365;3662;537;2619;185;572;5985;0;4066;4998;297;5533;2625;1126;1607;2947;1171;2178
++3296;3854;1712;2027;1518;2206;711;476;4242;1847;3889;3572;4563;4066;0;3662;3779;4196;1553;3090;3891;1109;3804;2001
++4229;4397;3050;2589;2150;1456;3135;3442;4865;2390;4822;4505;901;4999;3662;0;4712;544;3473;4023;4434;3070;4366;3575
++501;2074;2061;2135;3247;3256;3078;3375;800;2332;120;285;5698;297;3779;4712;0;5243;2338;839;1573;2660;1137;1891
++4763;4931;3584;3123;2684;1990;3669;3976;5396;2924;5356;5039;1445;5533;4196;544;5243;0;4007;4457;4968;3604;4900;4109
++1855;3250;434;1148;1444;2017;852;1144;2805;1338;2448;2131;4374;2625;1553;3473;2338;4007;0;1649;3015;429;2579;521
++356;2100;1372;1446;2568;2567;2385;2682;1389;1643;949;632;5009;1126;3090;4023;839;4457;1649;0;1599;1962;1163;1202
++1578;806;2738;2157;2979;2978;3230;3537;1070;2054;1660;1672;5335;1607;3891;4434;1573;4968;3015;1599;0;2970;446;2607
++2188;2933;586;1015;1014;1614;408;705;3127;926;2770;2453;3971;2947;1109;3070;2660;3604;429;1962;2970;0;2792;882
++1142;947;2302;1789;2911;2910;3143;3450;634;1986;1224;1236;5267;1171;3804;4366;1137;4900;2579;1163;446;2792;0;2171
++1408;3108;524;1238;1892;2119;1300;1597;2397;1428;2001;1684;4476;2178;2001;3575;1891;4109;521;1202;2607;882;2171;0
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1697163190346)
++++ b/.idea/misc.xml	(date 1697163190346)
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+new file mode 100644
+--- /dev/null	(date 1697163190501)
++++ b/.idea/jarRepositories.xml	(date 1697163190501)
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="MavenRepo" />
++      <option name="name" value="MavenRepo" />
++      <option name="url" value="https://repo.maven.apache.org/maven2/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/uiDesigner.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/uiDesigner.xml b/.idea/uiDesigner.xml
+new file mode 100644
+--- /dev/null	(date 1697163441618)
++++ b/.idea/uiDesigner.xml	(date 1697163441618)
+@@ -0,0 +1,124 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Palette2">
++    <group name="Swing">
++      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
++      </item>
++      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.svg" removable="false" auto-create-binding="false" can-attach-label="true">
++        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
++        <initial-values>
++          <property name="text" value="Button" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="RadioButton" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="CheckBox" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="Label" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
++          <preferred-size width="-1" height="20" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
++      </item>
++    </group>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/.name
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.name b/.idea/.name
+new file mode 100644
+--- /dev/null	(date 1697163190580)
++++ b/.idea/.name	(date 1697163190580)
+@@ -0,0 +1,1 @@
++Projeto-Teste-BlocoDeNotas
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+new file mode 100644
+--- /dev/null	(date 1697163190446)
++++ b/.idea/gradle.xml	(date 1697163190446)
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
++  <component name="GradleSettings">
++    <option name="linkedExternalProjectsSettings">
++      <GradleProjectSettings>
++        <option name="externalProjectPath" value="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas" />
++          </set>
++        </option>
++      </GradleProjectSettings>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1697163190491)
++++ b/.idea/vcs.xml	(date 1697163190491)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
