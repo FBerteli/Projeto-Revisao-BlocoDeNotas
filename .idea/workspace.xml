@@ -5,16 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96b455d8-2eb5-4230-a35b-f2ef10e514b2" name="Changes" comment="Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_13__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_13__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_13__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_13__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_20__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_20__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_34__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_10_2023_23_34__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_12_10_2023_23_37__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_12_10_2023_23_37__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2023_22_59__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2023_22_59__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2023_23_35__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2023_23_35__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" afterDir="false" />
@@ -23,7 +25,17 @@
       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/Cidade/CalculadorDistancia.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/org/example/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/org/example/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculadorDistancia.class.uniqueId5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem.class.uniqueId3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao.class.uniqueId2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoGrande.class.uniqueId1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoMedio.class.uniqueId4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoPequeno.class.uniqueId6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/TamanhoVeiculo.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/org/example/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,12 +90,12 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "vaguinhu"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;vaguinhu&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -108,7 +120,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "dev-backup"
+    "git-widget-placeholder": "interface-usuario"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -132,9 +144,9 @@
     <option name="LAST_COMMIT_MESSAGE" value="Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic" NAME="Projeto-Teste-BlocoDeNotas Coverage Results" MODIFIED="1697161859407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$CalculadorDistancia.ic" NAME="CalculadorDistancia Coverage Results" MODIFIED="1697163064142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>Cidade.*</FILTER>
     </SUITE>
+    <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic" NAME="Projeto-Teste-BlocoDeNotas Coverage Results" MODIFIED="1697161859407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
