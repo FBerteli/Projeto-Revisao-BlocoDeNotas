@@ -1,7 +1,5 @@
 package Veiculo;
 
 public enum TamanhoVeiculo {
-    PEQUENO,
-    MEDIO,
-    GRANDE
+    PEQUENO, MEDIO, GRANDE
 }
