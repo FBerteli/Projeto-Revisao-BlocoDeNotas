@@ -1,0 +1,258 @@
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Cidade;\r\n\r\nimport com.google.maps.DistanceMatrixApi;\r\nimport com.google.maps.DistanceMatrixApiRequest;\r\nimport com.google.maps.GeoApiContext;\r\nimport com.google.maps.model.Distance;\r\nimport com.google.maps.model.DistanceMatrix;\r\nimport com.google.maps.model.TravelMode;\r\n\r\nimport java.io.BufferedReader;\r\nimport java.io.FileReader;\r\nimport java.io.IOException;\r\nimport java.util.Scanner;\r\n\r\npublic class CalculoDistancia {\r\n    public static void main(String[] args) throws Exception {\r\n        // Inicialize o contexto da API do Google Maps com sua chave\r\n        GeoApiContext context = new GeoApiContext.Builder().apiKey(\"AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms\").build();\r\n\r\n        // Lê o arquivo CSV e obtém a primeira linha\r\n        String[] availableCities = readCSVHeader(\"Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv\");\r\n\r\n        // Mostra as cidades disponíveis\r\n        System.out.println(\"Cidades disponíveis:\");\r\n        for (String city : availableCities) {\r\n            System.out.println(city);\r\n        }\r\n\r\n        // Solicita ao usuário que selecione duas cidades\r\n        Scanner scanner = new Scanner(System.in);\r\n        System.out.print(\"Selecione a primeira cidade: \");\r\n        String city1 = scanner.nextLine();\r\n        System.out.print(\"Selecione a segunda cidade: \");\r\n        String city2 = scanner.nextLine();\r\n\r\n        // Solicita ao usuário que selecione o tipo de caminhão\r\n        System.out.print(\"Selecione o tipo de caminhão (por exemplo, 'DRIVING'): \");\r\n        String truckType = scanner.nextLine();\r\n\r\n        // Usa a API do Google Maps para calcular a distância\r\n        DistanceMatrixApiRequest request = DistanceMatrixApi.newRequest(context);\r\n        DistanceMatrix distanceMatrix = request.origins(city1)\r\n                .destinations(city2)\r\n                .mode(TravelMode.valueOf(truckType))\r\n                .await();\r\n\r\n        // A resposta inclui a distância em metros e outras informações\r\n        Distance distance = distanceMatrix.rows[0].elements[0].distance;\r\n        System.out.println(\"Distância entre \" + city1 + \" e \" + city2 + \": \" + distance.humanReadable);\r\n    }\r\n\r\n    // Função para ler o cabeçalho do arquivo CSV e retornar a lista de cidades disponíveis\r\n    private static String[] readCSVHeader(String csvFilePath) throws IOException {\r\n        String[] cities = null;\r\n        BufferedReader br = new BufferedReader(new FileReader(csvFilePath));\r\n        String line;\r\n        if ((line = br.readLine()) != null) {\r\n            cities = line.split(\";\");\r\n        }\r\n        br.close();\r\n        return cities;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java b/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java	(revision 88cc8493529900d14e86600539cec5eee90fb57b)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java	(date 1697247873223)
+@@ -1,11 +1,8 @@
+ package Cidade;
+ 
+-import com.google.maps.DistanceMatrixApi;
+-import com.google.maps.DistanceMatrixApiRequest;
+-import com.google.maps.GeoApiContext;
+-import com.google.maps.model.Distance;
+-import com.google.maps.model.DistanceMatrix;
+-import com.google.maps.model.TravelMode;
++import Veiculo.*;
++import com.google.maps.*;
++import com.google.maps.model.*;
+ 
+ import java.io.BufferedReader;
+ import java.io.FileReader;
+@@ -13,51 +10,55 @@
+ import java.util.Scanner;
+ 
+ public class CalculoDistancia {
+-    public static void main(String[] args) throws Exception {
+-        // Inicialize o contexto da API do Google Maps com sua chave
+-        GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms").build();
++    // Chave da API do Google Maps para autorização
++    private static final String CHAVE_API_GOOGLE_MAPS = "AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms";
+ 
+-        // Lê o arquivo CSV e obtém a primeira linha
+-        String[] availableCities = readCSVHeader("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
++    public static void main(String[] args) {
++        // Inicializa o contexto da API do Google Maps com a chave de autorização
++        GeoApiContext contexto = new GeoApiContext.Builder().apiKey(CHAVE_API_GOOGLE_MAPS).build();
+ 
+-        // Mostra as cidades disponíveis
+-        System.out.println("Cidades disponíveis:");
+-        for (String city : availableCities) {
+-            System.out.println(city);
+-        }
++        try {
++            // Lê os nomes das cidades a partir de um arquivo CSV
++            // Nesse momento é lido apenas a primeira linha(ou o cabeçalho) da planilha csv
++            String[] cidadesDisponiveis = lerNomesCidadesDoCSV("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
++
++            // Mostra as cidades disponíveis para o usuário
++            System.out.println("Cidades disponíveis:");
++            for (String cidade : cidadesDisponiveis) {
++                System.out.println(cidade);
++            }
+ 
+-        // Solicita ao usuário que selecione duas cidades
+-        Scanner scanner = new Scanner(System.in);
+-        System.out.print("Selecione a primeira cidade: ");
+-        String city1 = scanner.nextLine();
+-        System.out.print("Selecione a segunda cidade: ");
+-        String city2 = scanner.nextLine();
++            // Solicita ao usuário que selecione as cidades de origem e destino
++            Scanner scanner = new Scanner(System.in);
++            System.out.print("Selecione a primeira cidade: ");
++            String cidadeOrigem = scanner.nextLine();
++            System.out.print("Selecione a segunda cidade: ");
++            String cidadeDestino = scanner.nextLine();
+ 
+-        // Solicita ao usuário que selecione o tipo de caminhão
+-        System.out.print("Selecione o tipo de caminhão (por exemplo, 'DRIVING'): ");
+-        String truckType = scanner.nextLine();
+-
+-        // Usa a API do Google Maps para calcular a distância
+-        DistanceMatrixApiRequest request = DistanceMatrixApi.newRequest(context);
+-        DistanceMatrix distanceMatrix = request.origins(city1)
+-                .destinations(city2)
+-                .mode(TravelMode.valueOf(truckType))
+-                .await();
++            // Cria uma requisição à API do Google Maps para calcular a distância
++            DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);
++            DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)
++                    .destinations(cidadeDestino)
++                    .await();
+ 
+-        // A resposta inclui a distância em metros e outras informações
+-        Distance distance = distanceMatrix.rows[0].elements[0].distance;
+-        System.out.println("Distância entre " + city1 + " e " + city2 + ": " + distance.humanReadable);
++            // Obtém a distância e a exibe de forma legível para o usuário
++            Distance distancia = matrizDistancia.rows[0].elements[0].distance;
++            System.out.println("Distância entre " + cidadeOrigem + " e " + cidadeDestino + ": " + distancia.humanReadable);
++        } catch (Exception e) {
++            // Em caso de erro, imprime o rastreamento da pilha
++            e.printStackTrace();
++        }
+     }
+ 
+-    // Função para ler o cabeçalho do arquivo CSV e retornar a lista de cidades disponíveis
+-    private static String[] readCSVHeader(String csvFilePath) throws IOException {
+-        String[] cities = null;
+-        BufferedReader br = new BufferedReader(new FileReader(csvFilePath));
+-        String line;
+-        if ((line = br.readLine()) != null) {
+-            cities = line.split(";");
+-        }
+-        br.close();
+-        return cities;
+-    }
+-}
++    private static String[] lerNomesCidadesDoCSV(String caminhoArquivoCSV) throws IOException {
++        String[] cidades = null;
++        try (BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivoCSV))) {
++            String linha;
++            if ((linha = leitor.readLine()) != null) {
++                // Divide a linha do arquivo CSV em nomes de cidades usando ';' como delimitador
++                cidades = linha.split(";");
++            }
++        }
++        return cidades;
++    }
++}
+\ No newline at end of file
+Index: .idea/csv-editor.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CsvFileAttributes\">\r\n    <option name=\"attributeMap\">\r\n      <map>\r\n        <entry key=\"C:\\Users\\vag\\IdeaProjects\\untitled\\DistanciasCidadesCSV.csv\">\r\n          <value>\r\n            <Attribute>\r\n              <option name=\"separator\" value=\";\" />\r\n            </Attribute>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"\\Projeto-Teste-BlocoDeNotas\\DistanciasCidadesCSV.csv\">\r\n          <value>\r\n            <Attribute>\r\n              <option name=\"separator\" value=\";\" />\r\n            </Attribute>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/csv-editor.xml b/.idea/csv-editor.xml
+--- a/.idea/csv-editor.xml	(revision 88cc8493529900d14e86600539cec5eee90fb57b)
++++ b/.idea/csv-editor.xml	(date 1697245406384)
+@@ -3,13 +3,6 @@
+   <component name="CsvFileAttributes">
+     <option name="attributeMap">
+       <map>
+-        <entry key="C:\Users\vag\IdeaProjects\untitled\DistanciasCidadesCSV.csv">
+-          <value>
+-            <Attribute>
+-              <option name="separator" value=";" />
+-            </Attribute>
+-          </value>
+-        </entry>
+         <entry key="\Projeto-Teste-BlocoDeNotas\DistanciasCidadesCSV.csv">
+           <value>
+             <Attribute>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"96b455d8-2eb5-4230-a35b-f2ef10e514b2\" name=\"Changes\" comment=\"Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.\">\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/.name\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/csv-editor.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/gradle.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/jarRepositories.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/uiDesigner.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/vcs.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/outputFiles.bin\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/outputFiles.bin\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build.gradle\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build.gradle\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand />\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Rebase.Settings\">\r\n    <option name=\"NEW_BASE\" value=\"origin/dev\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <favorite-branches>\r\n      <branch-storage>\r\n        <map>\r\n          <entry type=\"LOCAL\">\r\n            <value>\r\n              <list>\r\n                <branch-info repo=\"$PROJECT_DIR$\" source=\"dev\" />\r\n              </list>\r\n            </value>\r\n          </entry>\r\n        </map>\r\n      </branch-storage>\r\n    </favorite-branches>\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"dev\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\"><![CDATA[{\r\n  \"lastFilter\": {\r\n    \"state\": \"OPEN\",\r\n    \"assignee\": \"vaguinhu\"\r\n  }\r\n}]]></component>\r\n  <component name=\"GithubPullRequestsUISettings\">\r\n    <option name=\"selectedUrlAndAccountId\">\r\n      <UrlAndAccount>\r\n        <option name=\"accountId\" value=\"8b7f498b-5908-45c7-92e5-3d605327abf7\" />\r\n        <option name=\"url\" value=\"https://github.com/FBerteli/Projeto-Revisao-BlocoDeNotas.git\" />\r\n      </UrlAndAccount>\r\n    </option>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2WggWWd8tcYOt3I46uqmcIv8Jtf\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"dev-backup\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\vag\\Documents\\Projeto-Revisao-BlocoDeNotas\\Projeto-Teste-BlocoDeNotas\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"96b455d8-2eb5-4230-a35b-f2ef10e514b2\" name=\"Changes\" comment=\"\" />\r\n      <created>1697159669092</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1697159669092</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic\" NAME=\"Projeto-Teste-BlocoDeNotas Coverage Results\" MODIFIED=\"1697161859407\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$CalculadorDistancia.ic\" NAME=\"CalculadorDistancia Coverage Results\" MODIFIED=\"1697163064142\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\">\r\n      <FILTER>Cidade.*</FILTER>\r\n    </SUITE>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 88cc8493529900d14e86600539cec5eee90fb57b)
++++ b/.idea/workspace.xml	(date 1697246208121)
+@@ -5,25 +5,26 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="96b455d8-2eb5-4230-a35b-f2ef10e514b2" name="Changes" comment="Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.">
+-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build.gradle" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/Cidade/CalculadorDistancia.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculadorDistancia.class.uniqueId5" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem.class.uniqueId3" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao.class.uniqueId2" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoGrande.class.uniqueId1" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoMedio.class.uniqueId4" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoPequeno.class.uniqueId6" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/TamanhoVeiculo.class.uniqueId0" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -73,17 +74,17 @@
+     </favorite-branches>
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+       <map>
+-        <entry key="$PROJECT_DIR$" value="dev" />
++        <entry key="$PROJECT_DIR$" value="interface-usuario" />
+       </map>
+     </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+-  "lastFilter": {
+-    "state": "OPEN",
+-    "assignee": "vaguinhu"
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;vaguinhu&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="GithubPullRequestsUISettings">
+     <option name="selectedUrlAndAccountId">
+       <UrlAndAccount>
+@@ -108,7 +109,7 @@
+     "RunOnceActivity.OpenProjectViewOnStart": "true",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "git-widget-placeholder": "dev-backup"
++    "git-widget-placeholder": "dev"
+   }
+ }]]></component>
+   <component name="RecentsManager">
+@@ -135,6 +136,12 @@
+     <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic" NAME="Projeto-Teste-BlocoDeNotas Coverage Results" MODIFIED="1697161859407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+     <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$CalculadorDistancia.ic" NAME="CalculadorDistancia Coverage Results" MODIFIED="1697163064142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+       <FILTER>Cidade.*</FILTER>
++    </SUITE>
++    <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$CalculoDistancia.ic" NAME="CalculoDistancia Coverage Results" MODIFIED="1697165409939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
++      <FILTER>Cidade.*</FILTER>
++    </SUITE>
++    <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$Main.ic" NAME="Main Coverage Results" MODIFIED="1697243683932" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
++      <FILTER>org.example.*</FILTER>
+     </SUITE>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" default=\"true\" project-jdk-name=\"17\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 88cc8493529900d14e86600539cec5eee90fb57b)
++++ b/.idea/misc.xml	(date 1697245406664)
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">
