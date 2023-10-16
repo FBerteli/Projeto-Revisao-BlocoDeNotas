@@ -31,6 +31,7 @@ public class Main {
 
             int opcao = scanner.nextInt();
             scanner.nextLine();
+
         switch (opcao) {
 
             case 1:
@@ -107,43 +108,63 @@ public class Main {
                 }
                 break;
             case 2:
-                try {
-                    // Lê os nomes das cidades a partir de um arquivo CSV
-                    String[] cidadesDisponíveis = lerNomesCidadesDoCSV("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
-
-                    // Exibe as cidades disponíveis para o usuário
-                    System.out.println("Cidades disponíveis:");
-                    for (String cidade : cidadesDisponíveis) {
-                        System.out.println(cidade);
-                    }
-
-                    // Solicita ao usuário que selecione as cidades de origem e destino
-                    System.out.print("Selecione a primeira cidade: ");
-                    String cidadeOrigem = scanner.nextLine();
-                    System.out.print("Selecione a segunda cidade: ");
-                    String cidadeDestino = scanner.nextLine();
-
-                    // Cria uma requisição à API do Google Maps para calcular a distância entre as cidades
-                    DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);
-                    DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)
-                            .destinations(cidadeDestino)
-                            .await();
-
-                    // Obtém a distância entre as cidades e a exibe de forma legível
-                    Distance distancia = matrizDistancia.rows[0].elements[0].distance;
-                    System.out.println("Distância entre " + cidadeOrigem + " e " + cidadeDestino + ": " + distancia.humanReadable);
-
-
+                boolean quebraLoop = true;
+                while(quebraLoop) {
+                    System.out.println("Digite a função que deseja realizar:");
+                    System.out.println("1. Cadastrar viagem.");
+                    System.out.println("2. Cadastrar item");
+                    System.out.println("3. Voltar ao menu inicial.");
+                    int opcaoNavegacao = scanner.nextInt();
+                    scanner.nextLine();
                     List<ListaProdutos> itens = new ArrayList<>();
-                    System.out.println("Selecione os itens abaixo, para transporte!");
-                    CadastroProdutos.listarItens();
-                    int escolha = scanner.nextInt();
-                    CadastroProdutos.obterQuantidade(scanner);
+                    switch (opcaoNavegacao) {
+                        case 1:
+
+                            try {
+                                // Lê os nomes das cidades a partir de um arquivo CSV
+                                String[] cidadesDisponíveis = lerNomesCidadesDoCSV("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
+
+                                // Exibe as cidades disponíveis para o usuário
+                                System.out.println("Cidades disponíveis:");
+                                for (String cidade : cidadesDisponíveis) {
+                                    System.out.println(cidade);
+                                }
+
+                                // Solicita ao usuário que selecione as cidades de origem e destino
+                                System.out.print("Selecione a primeira cidade: ");
+                                String cidadeOrigem = scanner.nextLine();
+                                System.out.print("Selecione a segunda cidade: ");
+                                String cidadeDestino = scanner.nextLine();
+
+                                // Cria uma requisição à API do Google Maps para calcular a distância entre as cidades
+                                DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);
+                                DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)
+                                        .destinations(cidadeDestino)
+                                        .await();
+
+                                // Obtém a distância entre as cidades e a exibe de forma legível
+                                Distance distancia = matrizDistancia.rows[0].elements[0].distance;
+                                System.out.println("Distância entre " + cidadeOrigem + " e " + cidadeDestino + ": " + distancia.humanReadable);
+                                break;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        case 2:
+                                System.out.println("Selecione os itens abaixo, para transporte!");
+                                CadastroProdutos.listarItens();
+                                int escolha = scanner.nextInt();
+                                int quantidade = CadastroProdutos.obterQuantidade(scanner);
+                                CadastroProdutos.adicionarItem(itens, escolha, quantidade);
+                                CadastroProdutos.exibirItensSelecionados(itens);
+                                break;
+                        case 3:
+                            System.out.println("Encerrando o cadastro.");
+                            quebraLoop = false;
+                            break;
+                    }
                 }
-                catch (Exception e){
-                e.printStackTrace();
-            }
-                break;
+
+
             case 3:
                 break;
             case 4:

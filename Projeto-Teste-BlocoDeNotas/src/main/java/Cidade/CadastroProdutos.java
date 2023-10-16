@@ -33,7 +33,7 @@ public class CadastroProdutos {
         System.out.println("2. Geladeira");
         System.out.println("3. Air Fryer");
         System.out.println("4. Cadeira");
-        System.out.println("5. Luminária");
+        System.out.println("5. Luminaria");
         System.out.println("6. Lavadora de Roupa");
         System.out.println("7. PlayStation 5");
         System.out.println("8. Nintendo Switch");
@@ -52,7 +52,7 @@ public class CadastroProdutos {
         // Com base na escolha do usuário, cria uma instância do item selecionado
         switch (escolha) {
             case 1:
-                item = new Celular();
+                item= new Celular();
                 break;
             case 2:
                 item = new Geladeira();
@@ -87,7 +87,7 @@ public class CadastroProdutos {
 
     public static void exibirItensSelecionados(List<ListaProdutos> itens) {
         // Exibe os itens selecionados pelo usuário
-        System.out.println("Itens selecionados:");
+        System.out.println("Itens Cadastrados:");
         for (ListaProdutos item : itens) {
             System.out.println(item.getNome() + " - Peso: " + item.getPeso());
         }
