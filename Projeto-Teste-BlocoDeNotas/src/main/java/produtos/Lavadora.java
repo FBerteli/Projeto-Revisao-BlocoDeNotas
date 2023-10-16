@@ -1,19 +1,7 @@
 package produtos;
 
-public class Lavadora extends Produto {
-
-    public static String nome = "Lavadora de Roupas";
-    public static double peso = 15;
-
-    public Lavadora(String nome, double peso){
-        super(nome, peso);
+public class Lavadora extends ListaProdutos {
+    public Lavadora() {
+        super("Lavadora de Roupa", 15.0, 0);
     }
-
-    public static String getNome(){
-        return nome;
-    }
-    public static double getPeso() {
-        return peso;
-    }
-
 }
