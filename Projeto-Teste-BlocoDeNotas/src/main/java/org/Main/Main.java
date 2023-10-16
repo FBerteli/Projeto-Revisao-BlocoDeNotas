@@ -103,6 +103,7 @@ public class Main {
             }
                 break;
             case 2:
+
                 break;
             case 3:
                 break;
@@ -119,7 +120,7 @@ public class Main {
         }
         }
     }
-    //##########################DESTA LINHA PRA BAIXO NÃO ESTÁ DIRETAMENTE LIGADO AO PROGRAMA.##########################
+    //################################################################################################################
     // Função para ler os nomes das cidades a partir de um arquivo CSV
     private static String[] lerNomesCidadesDoCSV(String caminhoArquivoCSV) throws IOException {
         String[] cidades = null;

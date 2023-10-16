@@ -1,18 +1,8 @@
 package produtos;
 
-public class Cadeira extends Produto {
-    public static String nome = "Cadeira";
-    public static double peso = 5;
-
-    public Cadeira(String nome, double peso){
-        super(nome, peso);
-    }
-
-    public static String getNome(){
-        return nome;
-    }
-    public static double getPeso() {
-        return peso;
+public class Cadeira extends ListaProdutos {
+    public Cadeira() {
+        super("Cadeira", 5.0, 0);
     }
 
 }
