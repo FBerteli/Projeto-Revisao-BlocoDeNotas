@@ -1,0 +1,1189 @@
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.Main;\r\n\r\n\r\nimport Veiculo.*;\r\nimport com.google.maps.*;\r\nimport com.google.maps.model.*;\r\n\r\n\r\nimport java.io.*;\r\nimport java.util.Scanner;\r\nimport java.text.DecimalFormat;\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n        // Inicialização do contexto da API do Google Maps com a chave de autenticação\r\n        GeoApiContext contexto = new GeoApiContext.Builder().apiKey(\"AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms\").build();\r\n\r\n        try {\r\n            // Lê os nomes das cidades a partir de um arquivo CSV\r\n            String[] cidadesDisponíveis = lerNomesCidadesDoCSV(\"Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv\");\r\n\r\n            // Exibe as cidades disponíveis para o usuário\r\n            System.out.println(\"Cidades disponíveis:\");\r\n            for (String cidade : cidadesDisponíveis) {\r\n                System.out.println(cidade);\r\n            }\r\n\r\n            Scanner scanner = new Scanner(System.in);\r\n\r\n            // Solicita ao usuário que selecione as cidades de origem e destino\r\n            System.out.print(\"Selecione a primeira cidade: \");\r\n            String cidadeOrigem = scanner.nextLine();\r\n            System.out.print(\"Selecione a segunda cidade: \");\r\n            String cidadeDestino = scanner.nextLine();\r\n\r\n            // Cria uma requisição à API do Google Maps para calcular a distância entre as cidades\r\n            DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);\r\n            DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)\r\n                    .destinations(cidadeDestino)\r\n                    .await();\r\n\r\n            // Obtém a distância entre as cidades e a exibe de forma legível\r\n            Distance distancia = matrizDistancia.rows[0].elements[0].distance;\r\n            System.out.println(\"Distância entre \" + cidadeOrigem + \" e \" + cidadeDestino + \": \" + distancia.humanReadable);\r\n\r\n            System.out.println(\"Agora, vamos calcular o custo da viagem:\");\r\n\r\n            // Solicita ao usuário que selecione o tamanho do caminhão\r\n            System.out.println(\"Selecione o tamanho do caminhão: \");\r\n            System.out.println(\"1 - Pequeno\");\r\n            System.out.println(\"2 - Médio\");\r\n            System.out.println(\"3 - Grande\");\r\n            int opcaoTamanho = scanner.nextInt();\r\n\r\n            TamanhoVeiculo tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO; // Tamanho padrão (pequeno)\r\n\r\n            switch (opcaoTamanho) {\r\n                case 1:\r\n                    tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO;\r\n                    break;\r\n                case 2:\r\n                    tamanhoVeiculoSelecionado = TamanhoVeiculo.MEDIO;\r\n                    break;\r\n                case 3:\r\n                    tamanhoVeiculoSelecionado = TamanhoVeiculo.GRANDE;\r\n                    break;\r\n                default:\r\n                    System.out.println(\"Opção inválida. Usando caminhão pequeno por padrão.\");\r\n            }\r\n\r\n            // Converte a distância da viagem de metros para quilômetros\r\n            double distanciaViagem = distancia.inMeters / 1000.0;\r\n\r\n            // Cria um objeto de caminhão com base no tamanho selecionado\r\n            Caminhao caminhao = criarVeiculo(tamanhoVeiculoSelecionado);\r\n\r\n            // Calcula o custo da viagem\r\n            double custo = caminhao.getPrecoPorKm() * distanciaViagem;\r\n\r\n            // Formata o custo como valor em Reais (R$) com duas casas decimais\r\n            DecimalFormat df = new DecimalFormat(\"###,###.00\");\r\n            String valorFormatado = \"R$\" + df.format(custo);\r\n\r\n            // Exibe o custo da viagem com o tamanho do caminhão selecionado\r\n            System.out.println(\"Custo da viagem com caminhão \" + tamanhoVeiculoSelecionado + \": \" + valorFormatado);\r\n\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    // Função para ler os nomes das cidades a partir de um arquivo CSV\r\n    private static String[] lerNomesCidadesDoCSV(String caminhoArquivoCSV) throws IOException {\r\n        String[] cidades = null;\r\n        try (BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivoCSV))) {\r\n            String linha;\r\n            if ((linha = leitor.readLine()) != null) {\r\n                // Divide a linha do arquivo CSV em nomes de cidades usando ';' como delimitador\r\n                cidades = linha.split(\";\");\r\n            }\r\n        }\r\n        return cidades;\r\n    }\r\n\r\n    // Função para criar um objeto de caminhão com base no tamanho selecionado\r\n    private static Caminhao criarVeiculo(TamanhoVeiculo tamanhoVeiculo) {\r\n        switch (tamanhoVeiculo) {\r\n            case PEQUENO:\r\n                return new CaminhaoPequeno();\r\n            case MEDIO:\r\n                return new CaminhaoMedio();\r\n            case GRANDE:\r\n                return new CaminhaoGrande();\r\n            default:\r\n                return new CaminhaoPequeno(); // Usando caminhão pequeno por padrão.\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java b/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java	(date 1697437221728)
+@@ -2,6 +2,8 @@
+ 
+ 
+ import Veiculo.*;
++import produtos.*;
++import ListarProdutos.CadastroProdutos;
+ import com.google.maps.*;
+ import com.google.maps.model.*;
+ 
+@@ -10,83 +12,121 @@
+ import java.util.Scanner;
+ import java.text.DecimalFormat;
+ public class Main {
++
+     public static void main(String[] args) {
++
++        Scanner scanner = new Scanner(System.in);
+         // Inicialização do contexto da API do Google Maps com a chave de autenticação
+         GeoApiContext contexto = new GeoApiContext.Builder().apiKey("AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms").build();
++        while (true){
++
++            System.out.println("Escolha uma opção:");
++            System.out.println("1. Consultar trechos e modalidades.");
++            System.out.println("2. Cadastrar transporte");
++            System.out.println("3. Consulta de estatística.");
++            System.out.println("4. Sair");
++
++            int opcao = scanner.nextInt();
++            scanner.nextLine();
++        switch (opcao) {
++
++            case 1:
+ 
+-        try {
+-            // Lê os nomes das cidades a partir de um arquivo CSV
+-            String[] cidadesDisponíveis = lerNomesCidadesDoCSV("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
++            try {
++                // Lê os nomes das cidades a partir de um arquivo CSV
++                String[] cidadesDisponiveis = lerNomesCidadesDoCSV("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
+ 
+-            // Exibe as cidades disponíveis para o usuário
+-            System.out.println("Cidades disponíveis:");
+-            for (String cidade : cidadesDisponíveis) {
+-                System.out.println(cidade);
+-            }
++                // Exibe as cidades disponíveis para o usuário
++                System.out.println("Cidades disponíveis:");
++                for (String cidade : cidadesDisponiveis) {
++                    System.out.println(cidade);
++                }
+ 
+-            Scanner scanner = new Scanner(System.in);
+-
+-            // Solicita ao usuário que selecione as cidades de origem e destino
+-            System.out.print("Selecione a primeira cidade: ");
+-            String cidadeOrigem = scanner.nextLine();
+-            System.out.print("Selecione a segunda cidade: ");
+-            String cidadeDestino = scanner.nextLine();
++                // Solicita ao usuário que selecione as cidades de origem e destino
++                System.out.print("Selecione a primeira cidade: ");
++                String cidadeOrigem = scanner.nextLine();
++                System.out.print("Selecione a segunda cidade: ");
++                String cidadeDestino = scanner.nextLine();
+ 
+-            // Cria uma requisição à API do Google Maps para calcular a distância entre as cidades
+-            DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);
+-            DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)
+-                    .destinations(cidadeDestino)
+-                    .await();
++                // Cria uma requisição à API do Google Maps para calcular a distância entre as cidades
++                DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);
++                DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)
++                        .destinations(cidadeDestino)
++                        .await();
+ 
+-            // Obtém a distância entre as cidades e a exibe de forma legível
+-            Distance distancia = matrizDistancia.rows[0].elements[0].distance;
+-            System.out.println("Distância entre " + cidadeOrigem + " e " + cidadeDestino + ": " + distancia.humanReadable);
++                // Obtém a distância entre as cidades e a exibe de forma legível
++                Distance distancia = matrizDistancia.rows[0].elements[0].distance;
++                System.out.println("Distância entre " + cidadeOrigem + " e " + cidadeDestino + ": " + distancia.humanReadable);
+ 
+-            System.out.println("Agora, vamos calcular o custo da viagem:");
++                System.out.println("Agora, vamos calcular o custo da viagem:");
+ 
+-            // Solicita ao usuário que selecione o tamanho do caminhão
+-            System.out.println("Selecione o tamanho do caminhão: ");
+-            System.out.println("1 - Pequeno");
+-            System.out.println("2 - Médio");
+-            System.out.println("3 - Grande");
+-            int opcaoTamanho = scanner.nextInt();
++                // Solicita ao usuário que selecione o tamanho do caminhão
++                System.out.println("Selecione o tamanho do caminhão: ");
++                System.out.println("1 - Pequeno");
++                System.out.println("2 - Médio");
++                System.out.println("3 - Grande");
++                int opcaoTamanho = scanner.nextInt();
+ 
+-            TamanhoVeiculo tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO; // Tamanho padrão (pequeno)
++                TamanhoVeiculo tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO; // Tamanho padrão (pequeno)
+ 
+-            switch (opcaoTamanho) {
+-                case 1:
+-                    tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO;
+-                    break;
+-                case 2:
+-                    tamanhoVeiculoSelecionado = TamanhoVeiculo.MEDIO;
+-                    break;
+-                case 3:
+-                    tamanhoVeiculoSelecionado = TamanhoVeiculo.GRANDE;
+-                    break;
+-                default:
+-                    System.out.println("Opção inválida. Usando caminhão pequeno por padrão.");
+-            }
++                switch (opcaoTamanho) {
++                    case 1:
++                        tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO;
++                        break;
++                    case 2:
++                        tamanhoVeiculoSelecionado = TamanhoVeiculo.MEDIO;
++                        break;
++                    case 3:
++                        tamanhoVeiculoSelecionado = TamanhoVeiculo.GRANDE;
++                        break;
++                    default:
++                        System.out.println("Opção inválida. Usando caminhão pequeno por padrão.");
++                }
+ 
+-            // Converte a distância da viagem de metros para quilômetros
+-            double distanciaViagem = distancia.inMeters / 1000.0;
++                // Converte a distância da viagem de metros para quilômetros
++                double distanciaViagem = distancia.inMeters / 1000.0;
+ 
+-            // Cria um objeto de caminhão com base no tamanho selecionado
+-            Caminhao caminhao = criarVeiculo(tamanhoVeiculoSelecionado);
++                // Cria um objeto de caminhão com base no tamanho selecionado
++                Caminhao caminhao = criarVeiculo(tamanhoVeiculoSelecionado);
+ 
+-            // Calcula o custo da viagem
+-            double custo = caminhao.getPrecoPorKm() * distanciaViagem;
++                // Calcula o custo da viagem
++                double custo = caminhao.getPrecoPorKm() * distanciaViagem;
+ 
+-            // Formata o custo como valor em Reais (R$) com duas casas decimais
+-            DecimalFormat df = new DecimalFormat("###,###.00");
+-            String valorFormatado = "R$" + df.format(custo);
++                // Formata o custo como valor em Reais (R$) com duas casas decimais
++                DecimalFormat df = new DecimalFormat("###,###.00");
++                String valorFormatado = "R$" + df.format(custo);
+ 
+-            // Exibe o custo da viagem com o tamanho do caminhão selecionado
+-            System.out.println("Custo da viagem com caminhão " + tamanhoVeiculoSelecionado + ": " + valorFormatado);
++                // Exibe o custo da viagem com o tamanho do caminhão selecionado
++                System.out.println("Custo da viagem com caminhão " + tamanhoVeiculoSelecionado + ": " + valorFormatado);
+ 
+-        } catch (Exception e) {
+-            e.printStackTrace();
++            }
++            catch (Exception e) {
++                e.printStackTrace();
++            }
++                break;
++            case 2:
++                CadastroProdutos cadastroProdutos = new CadastroProdutos();
++                cadastroProdutos.main(args);
++                break;
++            case 3:
++
++                break;
++            case 4:
++                System.out.println("Encerrando o programa.");
++                scanner.close();
++                System.exit(0);
++                break;
++            default:
++                System.out.println("Opção inválida. Tente novamente.\n");
++
++
++
+         }
++        }
+     }
++
++    //DESTA LINHA PRA BAIXO NÃO ESTÁ DIRETAMENTE LIGADO AO PROGRAMA.
++
+ 
+     // Função para ler os nomes das cidades a partir de um arquivo CSV
+     private static String[] lerNomesCidadesDoCSV(String caminhoArquivoCSV) throws IOException {
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/Veiculo/CalculoViagem.java
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/Veiculo/CalculoViagem.java b/Projeto-Teste-BlocoDeNotas/src/main/java/Veiculo/CalculoViagem.java
+deleted file mode 100644
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/Veiculo/CalculoViagem.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ /dev/null	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
+@@ -1,76 +0,0 @@
+-package Veiculo;
+-
+-import Cidade.CalculoDistancia;
+-
+-import java.util.Scanner;
+-//ESSA CLASSE FOI DESCARTADA, SÓ CONTINA AQUI PRA OS DEVS NOTAREM O QUE FOI FEITO
+-// A INTERFACE FUNCIONADO FOI DEIXADA NA MAIN
+-public class CalculoViagem {
+-    public static void main(String[] args) {
+-        Scanner scanner = new Scanner(System.in);
+-
+-        // Solicita ao usuário que selecione as cidades de origem e destino
+-        System.out.print("Selecione a primeira cidade: ");
+-        String cidadeOrigem = scanner.next();
+-        System.out.print("Selecione a segunda cidade: ");
+-        String cidadeDestino = scanner.next();
+-
+-        // Calcula a distância entre as cidades
+-        double distancia = calcularDistancia(cidadeOrigem, cidadeDestino);
+-
+-        // Solicita ao usuário que selecione o tamanho do caminhão
+-        System.out.println("Selecione o tamanho do caminhão: ");
+-        System.out.println("1 - Pequeno");
+-        System.out.println("2 - Médio");
+-        System.out.println("3 - Grande");
+-        int opcaoTamanho = scanner.nextInt();
+-
+-        TamanhoVeiculo tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO; // Tamanho padrão (pequeno)
+-
+-        switch (opcaoTamanho) {
+-            case 1:
+-                tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO;
+-                break;
+-            case 2:
+-                tamanhoVeiculoSelecionado = TamanhoVeiculo.MEDIO;
+-                break;
+-            case 3:
+-                tamanhoVeiculoSelecionado = TamanhoVeiculo.GRANDE;
+-                break;
+-            default:
+-                System.out.println("Opção inválida. Usando caminhão pequeno por padrão.");
+-        }
+-
+-        // Cria o veículo com base no tamanho selecionado
+-        Caminhao caminhao = criarVeiculo(tamanhoVeiculoSelecionado);
+-
+-        // Calcula o custo da viagem
+-        double custo = calcularCustoViagem(caminhao, distancia);
+-
+-        System.out.println("Distância entre " + cidadeOrigem + " e " + cidadeDestino + ": " + distancia + " km");
+-        System.out.println("Custo da viagem com caminhão " + tamanhoVeiculoSelecionado + ": R$" + custo);
+-    }
+-
+-    private static double calcularDistancia(String cidadeOrigem, String cidadeDestino) {
+-        // Implemente o cálculo da distância aqui. Pode usar a classe CalculoDistancia.
+-        // Exemplo: return CalculoDistancia.calcularDistancia(cidadeOrigem, cidadeDestino);
+-        return 0.0; // Substitua pelo cálculo real.
+-    }
+-
+-    private static Caminhao criarVeiculo(TamanhoVeiculo tamanhoVeiculo) {
+-        switch (tamanhoVeiculo) {
+-            case PEQUENO:
+-                return new CaminhaoPequeno();
+-            case MEDIO:
+-                return new CaminhaoMedio();
+-            case GRANDE:
+-                return new CaminhaoGrande();
+-            default:
+-                return new CaminhaoPequeno(); // Usando caminhão pequeno por padrão.
+-        }
+-    }
+-
+-    private static double calcularCustoViagem(Caminhao caminhao, double distancia) {
+-        return caminhao.getPrecoPorKm() * distancia;
+-    }
+-}
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Switch.java
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Switch.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Switch.java
+deleted file mode 100644
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Switch.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ /dev/null	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
+@@ -1,19 +0,0 @@
+-package produtos;
+-
+-public class Switch extends Produto{
+-
+-    public static String nome = "Nintendo Switch";
+-    public static double peso = 0.3;
+-
+-    public Switch(String nome, double peso){
+-        super(nome, peso);
+-    }
+-
+-    public static String getNome(){
+-        return nome;
+-    }
+-    public static double getPeso() {
+-        return peso;
+-    }
+-
+-}
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java b/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java
+deleted file mode 100644
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ /dev/null	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
+@@ -1,66 +0,0 @@
+-package Cidade;
+-
+-import Veiculo.CalculoViagem;
+-import Veiculo.*;
+-import com.google.maps.*;
+-import com.google.maps.model.*;
+-
+-import java.io.BufferedReader;
+-import java.io.FileReader;
+-import java.io.IOException;
+-import java.util.Scanner;
+-//ESSA CLASSE FOI DESCARTADA, SÓ CONTINA AQUI PRA OS DEVS NOTAREM O QUE FOI FEITO OU ALTERADO
+-// A INTERFACE FUNCIONADO FOI DEIXADA NA MAIN
+-public class CalculoDistancia {
+-    // Chave da API do Google Maps para autorização
+-    private static final String CHAVE_API_GOOGLE_MAPS = "AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms";
+-
+-    public static void main(String[] args) {
+-        // Inicializa o contexto da API do Google Maps com a chave de autorização
+-        GeoApiContext contexto = new GeoApiContext.Builder().apiKey(CHAVE_API_GOOGLE_MAPS).build();
+-
+-        try {
+-            // Lê os nomes das cidades a partir de um arquivo CSV
+-            // Nesse momento é lido apenas a primeira linha(ou o cabeçalho) da planilha csv
+-            String[] cidadesDisponiveis = lerNomesCidadesDoCSV("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
+-
+-            // Mostra as cidades disponíveis para o usuário
+-            System.out.println("Cidades disponíveis:");
+-            for (String cidade : cidadesDisponiveis) {
+-                System.out.println(cidade);
+-            }
+-
+-            // Solicita ao usuário que selecione as cidades de origem e destino
+-            Scanner scanner = new Scanner(System.in);
+-            System.out.print("Selecione a primeira cidade: ");
+-            String cidadeOrigem = scanner.nextLine();
+-            System.out.print("Selecione a segunda cidade: ");
+-            String cidadeDestino = scanner.nextLine();
+-
+-            // Cria uma requisição à API do Google Maps para calcular a distância
+-            DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);
+-            DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)
+-                    .destinations(cidadeDestino)
+-                    .await();
+-
+-            // Obtém a distância e a exibe de forma legível para o usuário
+-            Distance distancia = matrizDistancia.rows[0].elements[0].distance;
+-            System.out.println("Distância entre " + cidadeOrigem + " e " + cidadeDestino + ": " + distancia.humanReadable);
+-        } catch (Exception e) {
+-            // Em caso de erro, imprime o rastreamento da pilha
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    private static String[] lerNomesCidadesDoCSV(String caminhoArquivoCSV) throws IOException {
+-        String[] cidades = null;
+-        try (BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivoCSV))) {
+-            String linha;
+-            if ((linha = leitor.readLine()) != null) {
+-                // Divide a linha do arquivo CSV em nomes de cidades usando ';' como delimitador
+-                cidades = linha.split(";");
+-            }
+-        }
+-        return cidades;
+-    }
+-}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroProdutos.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroProdutos.java b/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroProdutos.java
+new file mode 100644
+--- /dev/null	(date 1697429387937)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroProdutos.java	(date 1697429387937)
+@@ -0,0 +1,92 @@
++package ListarProdutos;
++
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Scanner;
++import produtos.*;
++
++public class CadastroProdutos {
++    public static void main(String[] args) {
++        Scanner scanner = new Scanner(System.in);
++        List<ListaProdutos> itens = new ArrayList<>();
++
++        while (true) {
++            listarItens();
++            int escolha = scanner.nextInt();
++
++            if (escolha == 0) {
++                break;
++            } else if (escolha >= 1 && escolha <= 8) {
++                int quantidade = obterQuantidade(scanner);
++                adicionarItem(itens, escolha, quantidade);
++            } else {
++                System.out.println("Opção inválida. Escolha um número válido.");
++            }
++        }
++
++        exibirItensSelecionados(itens);
++    }
++
++    public static void listarItens() {
++        System.out.println("Selecione um item para adicionar à lista:");
++        System.out.println("1. Celular");
++        System.out.println("2. Geladeira");
++        System.out.println("3. Air Fryer");
++        System.out.println("4. Cadeira");
++        System.out.println("5. Luminária");
++        System.out.println("6. Lavadora de Roupa");
++        System.out.println("7. PlayStation 5");
++        System.out.println("8. Nintendo Switch");
++        System.out.println("0. Finalizar lista");
++    }
++
++    public static int obterQuantidade(Scanner scanner) {
++        System.out.print("Digite a quantidade desejada: ");
++        return scanner.nextInt();
++    }
++
++    public static void adicionarItem(List<ListaProdutos> itens, int escolha, int quantidade) {
++        ListaProdutos item;
++
++        switch (escolha) {
++            case 1:
++                item = new Celular();
++                break;
++            case 2:
++                item = new Geladeira();
++                break;
++            case 3:
++                item = new AirFryer();
++                break;
++            case 4:
++                item = new Cadeira();
++                break;
++            case 5:
++                item = new Luminaria();
++                break;
++            case 6:
++                item = new Lavadora();
++                break;
++            case 7:
++                item = new Ps5();
++                break;
++            case 8:
++                item = new NintendoSwitch();
++                break;
++            default:
++                System.out.println("Encerrando o programa.");
++                System.exit(0);
++                return;
++        }
++
++        itens.add(item);
++        System.out.println("Adicionado: " + quantidade + "x " + item.getNome());
++    }
++
++    public static void exibirItensSelecionados(List<ListaProdutos> itens) {
++        System.out.println("Itens selecionados:");
++        for (ListaProdutos item : itens) {
++            System.out.println(item.getNome() + " - Peso: " + item.getPeso());
++        }
++    }
++}
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroTransporte.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroTransporte.java b/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroTransporte.java
+new file mode 100644
+--- /dev/null	(date 1697438175062)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroTransporte.java	(date 1697438175062)
+@@ -0,0 +1,184 @@
++package ListarProdutos;
++
++import produtos.*;
++import org.Main.*;
++
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Scanner;
++
++public class CadastroTransporte {
++    public static void main(String[] args) {
++        Scanner scanner = new Scanner(System.in);
++        List<String> cidades = new ArrayList<>();
++        List<ListaProdutos> itens = new ArrayList<>();
++
++        while (true) {
++            MostrarOpcoes();
++
++            int opcao = scanner.nextInt();
++            scanner.nextLine(); // Limpa o buffer
++
++            switch (opcao) {
++                case 1:
++                    listarCidades(cidades);
++                    break;
++                case 2:
++                    adicionarCidade(cidades, scanner);
++                    break;
++                case 3:
++                    listarItens();
++                break;
++
++                case 4:
++                    exibirItensSelecionados(itens);
++                break;
++
++                case 5:
++                        listarItens();
++                        int escolha = scanner.nextInt();
++
++                        if (escolha == 0) {
++                            break;
++                        } else if (escolha >= 1 && escolha <= 8) {
++                            int quantidade = obterQuantidade(scanner);
++                            adicionarItemTransporte(itens, escolha, quantidade);
++                        } else {
++                            System.out.println("Opção inválida. Escolha um número válido.");
++                        }
++                    break;
++                case 6:
++                    calcularDistanciaECusto(cidades, itens);
++                    break;
++                case 7:
++                    exibirRelatorioEstatistico(cidades, itens);
++                    break;
++                case 8:
++                    System.out.println("Encerrando o programa.");
++                    scanner.close();
++                    System.exit(0);
++                    break;
++
++                default:
++                    System.out.println("Opção inválida. Tente novamente.");
++                    break;
++            }
++        }
++    }
++    public static void MostrarOpcoes() {
++        System.out.println("Escolha uma opção:");
++        System.out.println("1. Listar cidades");
++        System.out.println("2. Adicionar cidade");
++        System.out.println("3. Lista dos produtos");
++        System.out.println("4. Produtos a serem transportados");
++        System.out.println("5. Adicionar item para transporte");
++        System.out.println("6. Calcular distância e o custo");
++        System.out.println("7. Relatório de Dados Estatísticos");
++        System.out.println("8. Sair");
++    }
++    public static void listarItens() {
++        System.out.println("Selecione um item para adicionar à lista:");
++        System.out.println("1. Celular");
++        System.out.println("2. Geladeira");
++        System.out.println("3. Air Fryer");
++        System.out.println("4. Cadeira");
++        System.out.println("5. Luminária");
++        System.out.println("6. Lavadora de Roupa");
++        System.out.println("7. PlayStation 5");
++        System.out.println("8. Nintendo Switch");
++        System.out.println("0. Finalizar lista");
++    }
++
++    public static int obterQuantidade(Scanner scanner) {
++        System.out.print("Digite a quantidade desejada: ");
++        return scanner.nextInt();
++    }
++
++    public static void listarCidades(List<String> cidades) {
++        System.out.println("Cidades disponíveis para transporte:");
++        for (String cidade : cidades) {
++            System.out.println(cidade);
++        }
++    }
++
++    public static void adicionarCidade(List<String> cidades, Scanner scanner) {
++        System.out.print("Digite o nome da cidade a ser adicionada: ");
++        String cidade = scanner.nextLine();
++        cidades.add(cidade);
++        System.out.println("Cidade adicionada: " + cidade);
++    }
++
++
++    public static void adicionarItemTransporte(List<ListaProdutos> itens, int escolha, int quantidade) {
++        ListaProdutos item;
++
++        switch (escolha) {
++            case 1:
++                item = new ListaProdutos("Celular", 0.7, quantidade);
++                break;
++            case 2:
++                item = new ListaProdutos("Geladeira", 50.0, quantidade);
++                break;
++            case 3:
++                item = new ListaProdutos("Air Fryer", 3.5, quantidade);
++                break;
++            case 4:
++                item = new ListaProdutos("Cadeira", 5.0,quantidade);
++                break;
++            case 5:
++                item = new ListaProdutos("Luminária", 0.8, quantidade);
++                break;
++            case 6:
++                item = new ListaProdutos("Lavadora de Roupa", 15.0, quantidade);
++                break;
++            case 7:
++                item = new ListaProdutos("PlayStation 5", 3.9, quantidade);
++                break;
++            case 8:
++                item = new ListaProdutos("Nintendo Switch", 0.3,quantidade);
++                break;
++            default:
++                System.out.println("Encerrando o programa.");
++                System.exit(0);
++                return;
++        }
++
++        itens.add(item);
++        System.out.println("Adicionado: " + quantidade + "x " + item.getNome());
++    }
++    public static void exibirItensSelecionados(List<ListaProdutos> itens) {
++        System.out.println("Itens a serem transportados:");
++        for (ListaProdutos item : itens) {
++            System.out.println(item.getNome() + " - Peso: " + item.getPeso() + " - Quantidade: " + item.getQuantidade ());
++        }
++    }
++    public static void calcularDistanciaECusto(List<String> cidades, List<ListaProdutos> itens) {
++        // Implemente aqui a lógica para calcular distância e custo com base nas cidades e itens.
++        // Pode usar a API do Google Maps para calcular distâncias entre as cidades e decidir o modelo de caminhão adequado.
++    }
++
++    public static void exibirRelatorioEstatistico(List<String> cidades, List<ListaProdutos> itens) {
++        double custoTotal = 0;
++        double custoPorTrecho = 0;
++        double custoMedioPorKm = 0;
++        double custoMedioPorTipoProduto = 0;
++        double totalPorTrecho = 0;
++        double totalPorModalidadeTransporte = 0;
++        int numeroTotalVeiculosDeslocados = 0;
++        int totalItensTransportados = 0;
++
++        // Calcule os valores estatísticos com base nos dados do programa
++
++        // Exiba o relatório de dados estatísticos
++        System.out.println("Relatório de Dados Estatísticos:");
++        System.out.println("Custo Total: " + custoTotal);
++        System.out.println("Custo por Trecho: " + custoPorTrecho);
++        System.out.println("Custo Médio por Km: " + custoMedioPorKm);
++        System.out.println("Custo Médio por Tipo de Produto: " + custoMedioPorTipoProduto);
++        System.out.println("Total por Trecho: " + totalPorTrecho);
++        System.out.println("Total por Modalidade de Transporte: " + totalPorModalidadeTransporte);
++        System.out.println("Número Total de Veículos Deslocados: " + numeroTotalVeiculosDeslocados);
++        System.out.println("Total de Itens Transportados: " + totalItensTransportados);
++    }
++}
++
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"96b455d8-2eb5-4230-a35b-f2ef10e514b2\" name=\"Changes\" comment=\"\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand />\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Rebase.Settings\">\r\n    <option name=\"NEW_BASE\" value=\"origin/dev\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <favorite-branches>\r\n      <branch-storage>\r\n        <map>\r\n          <entry type=\"LOCAL\">\r\n            <value>\r\n              <list>\r\n                <branch-info repo=\"$PROJECT_DIR$\" source=\"dev\" />\r\n              </list>\r\n            </value>\r\n          </entry>\r\n        </map>\r\n      </branch-storage>\r\n    </favorite-branches>\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"dev\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;vaguinhu&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">\r\n    <option name=\"selectedUrlAndAccountId\">\r\n      <UrlAndAccount>\r\n        <option name=\"accountId\" value=\"8b7f498b-5908-45c7-92e5-3d605327abf7\" />\r\n        <option name=\"url\" value=\"https://github.com/FBerteli/Projeto-Revisao-BlocoDeNotas.git\" />\r\n      </UrlAndAccount>\r\n    </option>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2WggWWd8tcYOt3I46uqmcIv8Jtf\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;interface-usuario&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\vag\\Documents\\Projeto-Revisao-BlocoDeNotas\\Projeto-Teste-BlocoDeNotas\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"96b455d8-2eb5-4230-a35b-f2ef10e514b2\" name=\"Changes\" comment=\"\" />\r\n      <created>1697159669092</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1697159669092</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1697295230921</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1697295230921</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.\" />\r\n    <MESSAGE value=\"Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic\" NAME=\"Projeto-Teste-BlocoDeNotas Coverage Results\" MODIFIED=\"1697161859407\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$CalculadorDistancia.ic\" NAME=\"CalculadorDistancia Coverage Results\" MODIFIED=\"1697163064142\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\">\r\n      <FILTER>Cidade.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$CalculoDistancia.ic\" NAME=\"CalculoDistancia Coverage Results\" MODIFIED=\"1697165409939\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\">\r\n      <FILTER>Cidade.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$Main.ic\" NAME=\"Main Coverage Results\" MODIFIED=\"1697243683932\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\">\r\n      <FILTER>org.example.*</FILTER>\r\n    </SUITE>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/.idea/workspace.xml	(date 1697437838516)
+@@ -4,7 +4,61 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="96b455d8-2eb5-4230-a35b-f2ef10e514b2" name="Changes" comment="" />
++    <list default="true" id="96b455d8-2eb5-4230-a35b-f2ef10e514b2" name="Changes" comment="Criação da pasta e aqruivo dos testes.">
++      <change afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroProdutos.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/ListarProdutos/CadastroTransporte.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/NintendoSwitch.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_21_23__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_21_23__Changes_.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_03__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_03__Changes_.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_59__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_59__Changes_.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/checksums.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/checksums/sha1-checksums.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/Cidade/CalculoDistancia.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/Veiculo/CalculoViagem$1.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/Veiculo/CalculoViagem.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/org/Main/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/org/Main/Main$1.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/org/Main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/org/Main/Main.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/AirFryer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/AirFryer.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Cadeira.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Cadeira.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Celular.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Celular.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Geladeira.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Geladeira.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Lavadora.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Lavadora.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/ListaProdutos.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/ListaProdutos.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Luminaria.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Luminaria.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Ps5.class" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Ps5.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/classes/java/main/produtos/Switch.class" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem$1.class.uniqueId7" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem.class.uniqueId5" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao$1.class.uniqueId2" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao.class.uniqueId3" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoGrande.class.uniqueId1" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoMedio.class.uniqueId6" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoPequeno.class.uniqueId9" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Main$1.class.uniqueId4" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Main.class.uniqueId8" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Veiculo.class.uniqueId0" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/Cidade/CalculoDistancia.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/Veiculo/CalculoViagem.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/AirFryer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/AirFryer.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Cadeira.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Cadeira.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Celular.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Celular.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Geladeira.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Geladeira.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Lavadora.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Lavadora.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Luminaria.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Luminaria.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Ps5.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Ps5.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Switch.java" beforeDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -53,7 +107,7 @@
+     </favorite-branches>
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+       <map>
+-        <entry key="$PROJECT_DIR$" value="dev" />
++        <entry key="$PROJECT_DIR$" value="main" />
+       </map>
+     </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+@@ -83,18 +137,104 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;interface-usuario&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++    "git-widget-placeholder": "interface-usuario",
++    "ignore.virus.scanning.warn.message": "true",
++    "jdk.selected.JAVA_MODULE": "17",
++    "last_opened_file_path": "C:/Users/felip/Documents/ProjetoCaldeira/Projeto-Revisao-BlocoDeNotas",
++    "project.structure.last.edited": "Modules",
++    "project.structure.proportion": "0.0",
++    "project.structure.side.proportion": "0.0"
+   }
+-}</component>
++}]]></component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
+       <recent name="C:\Users\vag\Documents\Projeto-Revisao-BlocoDeNotas\Projeto-Teste-BlocoDeNotas" />
+     </key>
++  </component>
++  <component name="RunManager" selected="Application.CadastroTransporte">
++    <configuration name="CadastroProdutos" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="ListarProdutos.CadastroProdutos" />
++      <module name="Projeto-Teste-BlocoDeNotas.main" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="ListarProdutos.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="CadastroTransporte" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="ListarProdutos.CadastroTransporte" />
++      <module name="Projeto-Teste-BlocoDeNotas.main" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="ListarProdutos.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="Projeto-Teste-BlocoDeNotas [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list>
++            <option value="dependencies" />
++          </list>
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
++      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
++      <DebugAllEnabled>false</DebugAllEnabled>
++      <RunAsTest>false</RunAsTest>
++      <method v="2" />
++    </configuration>
++    <configuration name="Projeto-Teste-BlocoDeNotas [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list>
++            <option value="test" />
++          </list>
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
++      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
++      <DebugAllEnabled>false</DebugAllEnabled>
++      <RunAsTest>false</RunAsTest>
++      <method v="2" />
++    </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="Application.CadastroTransporte" />
++        <item itemvalue="Application.CadastroProdutos" />
++        <item itemvalue="Gradle.Projeto-Teste-BlocoDeNotas [dependencies]" />
++        <item itemvalue="Gradle.Projeto-Teste-BlocoDeNotas [test]" />
++      </list>
++    </recent_temporary>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+@@ -113,13 +253,22 @@
+       <option name="project" value="LOCAL" />
+       <updated>1697295230921</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="Criação da pasta e aqruivo dos testes.">
++      <option name="closed" value="true" />
++      <created>1697418838583</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1697418838583</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv." />
+     <MESSAGE value="Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;" />
++    <MESSAGE value="Criação da pasta e aqruivo dos testes." />
++    <option name="LAST_COMMIT_MESSAGE" value="Criação da pasta e aqruivo dos testes." />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic" NAME="Projeto-Teste-BlocoDeNotas Coverage Results" MODIFIED="1697161859407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Cadeira.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class Cadeira extends Produto {\r\n    public static String nome = \"Cadeira\";\r\n    public static double peso = 5;\r\n\r\n    public Cadeira(String nome, double peso){\r\n        super(nome, peso);\r\n    }\r\n\r\n    public static String getNome(){\r\n        return nome;\r\n    }\r\n    public static double getPeso() {\r\n        return peso;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Cadeira.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Cadeira.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Cadeira.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Cadeira.java	(date 1697436127511)
+@@ -1,18 +1,7 @@
+ package produtos;
+ 
+-public class Cadeira extends Produto {
+-    public static String nome = "Cadeira";
+-    public static double peso = 5;
+-
+-    public Cadeira(String nome, double peso){
+-        super(nome, peso);
++public class Cadeira extends ListaProdutos {
++    public Cadeira() {
++        super("Cadeira", 5.0,0);
+     }
+-
+-    public static String getNome(){
+-        return nome;
+-    }
+-    public static double getPeso() {
+-        return peso;
+-    }
+-
+-}
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Celular.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class Celular extends Produto{\r\n\r\n    public static String nome = \"Celular\";\r\n    public static double peso = 0.7;\r\n\r\n    public Celular(String nome, double peso){\r\n        super(nome, peso);\r\n\r\n    }\r\n\r\n    public static String getNome(){\r\n        return nome;\r\n    }\r\n    public static double getPeso() {\r\n        return peso;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Celular.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Celular.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Celular.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Celular.java	(date 1697436115684)
+@@ -1,19 +1,7 @@
+ package produtos;
+ 
+-public class Celular extends Produto{
+-
+-    public static String nome = "Celular";
+-    public static double peso = 0.7;
+-
+-    public Celular(String nome, double peso){
+-        super(nome, peso);
+-
++public class Celular extends ListaProdutos {
++    public Celular() {
++        super("Celular", 0.7, 0);
+     }
+-
+-    public static String getNome(){
+-        return nome;
+-    }
+-    public static double getPeso() {
+-        return peso;
+-    }
+-}
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/AirFryer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class AirFryer extends Produto{\r\n    public String nome = \"Air Fryer\";\r\n    public double peso = 3.5;\r\n\r\n    public AirFryer(String nome, double peso){\r\n        super(nome, peso);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/AirFryer.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/AirFryer.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/AirFryer.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/AirFryer.java	(date 1697436134179)
+@@ -1,11 +1,7 @@
+ package produtos;
+ 
+-public class AirFryer extends Produto{
+-    public String nome = "Air Fryer";
+-    public double peso = 3.5;
+-
+-    public AirFryer(String nome, double peso){
+-        super(nome, peso);
++public class AirFryer extends ListaProdutos {
++    public AirFryer() {
++        super("Air Fryer", 3.5, 0);
+     }
+-
+-}
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class ListaProdutos {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java	(date 1697435882803)
+@@ -1,4 +1,25 @@
+ package produtos;
+ 
+ public class ListaProdutos {
+-}
++    private String nome;
++    private double peso;
++    private int quantidade;
++
++    public ListaProdutos(String nome, double peso, int quantidade) {
++        this.nome = nome;
++        this.peso = peso;
++        this.quantidade = quantidade;
++    }
++
++    public String getNome() {
++        return nome;
++    }
++
++    public double getPeso() {
++        return peso;
++    }
++
++    public int getQuantidade() {
++        return quantidade;
++    }
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Luminaria.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class Luminaria extends Produto{\r\n    public static String nome = \"Luminária\";\r\n    public static double peso = 0.8;\r\n\r\n    public Luminaria(String nome, double peso){\r\n        super(nome, peso);\r\n\r\n    }\r\n\r\n    public static String getNome(){\r\n        return nome;\r\n    }\r\n    public static double getPeso() {\r\n        return peso;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Luminaria.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Luminaria.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Luminaria.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Luminaria.java	(date 1697436738266)
+@@ -1,19 +1,6 @@
+ package produtos;
+ 
+-public class Luminaria extends Produto{
+-    public static String nome = "Luminária";
+-    public static double peso = 0.8;
+-
+-    public Luminaria(String nome, double peso){
+-        super(nome, peso);
+-
++public class Luminaria extends ListaProdutos {
++    public Luminaria() {super("Luminária", 0.8, 0);
+     }
+-
+-    public static String getNome(){
+-        return nome;
+-    }
+-    public static double getPeso() {
+-        return peso;
+-    }
+-
+-}
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Geladeira.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class Geladeira extends Produto {\r\n\r\n    public static String nome = \"Geladeira\";\r\n    public static double peso = 50;\r\n\r\n    public Geladeira(String nome, double peso){\r\n\r\n        super(nome, peso);\r\n\r\n    }\r\n\r\n    public static String getNome(){\r\n        return nome;\r\n    }\r\n    public static double getPeso() {\r\n        return peso;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Geladeira.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Geladeira.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Geladeira.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Geladeira.java	(date 1697436138908)
+@@ -1,21 +1,7 @@
+ package produtos;
+ 
+-public class Geladeira extends Produto {
+-
+-    public static String nome = "Geladeira";
+-    public static double peso = 50;
+-
+-    public Geladeira(String nome, double peso){
+-
+-        super(nome, peso);
+-
++public class Geladeira extends ListaProdutos {
++    public Geladeira() {
++        super("Geladeira", 50.0, 0);
+     }
+-
+-    public static String getNome(){
+-        return nome;
+-    }
+-    public static double getPeso() {
+-        return peso;
+-    }
+-
+-}
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Lavadora.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class Lavadora extends Produto {\r\n\r\n    public static String nome = \"Lavadora de Roupas\";\r\n    public static double peso = 15;\r\n\r\n    public Lavadora(String nome, double peso){\r\n        super(nome, peso);\r\n    }\r\n\r\n    public static String getNome(){\r\n        return nome;\r\n    }\r\n    public static double getPeso() {\r\n        return peso;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Lavadora.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Lavadora.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Lavadora.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Lavadora.java	(date 1697436143340)
+@@ -1,19 +1,7 @@
+ package produtos;
+ 
+-public class Lavadora extends Produto {
+-
+-    public static String nome = "Lavadora de Roupas";
+-    public static double peso = 15;
+-
+-    public Lavadora(String nome, double peso){
+-        super(nome, peso);
++public class Lavadora extends ListaProdutos {
++    public Lavadora() {
++        super("Lavadora de Roupa", 15.0, 0);
+     }
+-
+-    public static String getNome(){
+-        return nome;
+-    }
+-    public static double getPeso() {
+-        return peso;
+-    }
+-
+-}
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/NintendoSwitch.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/NintendoSwitch.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/NintendoSwitch.java
+new file mode 100644
+--- /dev/null	(date 1697436159052)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/NintendoSwitch.java	(date 1697436159052)
+@@ -0,0 +1,7 @@
++package produtos;
++
++public class NintendoSwitch extends ListaProdutos {
++    public NintendoSwitch() {
++        super("Nintendo Switch", 0.3,0);
++    }
++}
+\ No newline at end of file
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Ps5.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class Ps5 extends Produto {\r\n\r\n    public static String nome = \"Playstation 5\";\r\n    public static double peso = 3.9;\r\n\r\n    public Ps5(String nome, double peso){\r\n        super(nome, peso);\r\n    }\r\n\r\n    public static String getNome(){\r\n        return nome;\r\n    }\r\n    public static double getPeso() {\r\n        return peso;\r\n    }\r\n\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Ps5.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Ps5.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Ps5.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/Ps5.java	(date 1697436198904)
+@@ -1,21 +1,9 @@
+ package produtos;
+ 
+-public class Ps5 extends Produto {
+-
+-    public static String nome = "Playstation 5";
+-    public static double peso = 3.9;
+-
+-    public Ps5(String nome, double peso){
+-        super(nome, peso);
+-    }
+-
+-    public static String getNome(){
+-        return nome;
++public class Ps5 extends ListaProdutos {
++    public Ps5() {
++        super("PlayStation 5", 3.9, 0);
+     }
+-    public static double getPeso() {
+-        return peso;
+-    }
+-
+ }
+ 
+ 

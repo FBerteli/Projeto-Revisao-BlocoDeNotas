@@ -1,0 +1,153 @@
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.Main;\r\n\r\n\r\nimport Veiculo.*;\r\nimport com.google.maps.*;\r\nimport com.google.maps.model.*;\r\n\r\n\r\nimport java.io.*;\r\nimport java.util.Scanner;\r\nimport java.text.DecimalFormat;\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n        // Inicialização do contexto da API do Google Maps com a chave de autenticação\r\n        GeoApiContext contexto = new GeoApiContext.Builder().apiKey(\"AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms\").build();\r\n\r\n        try {\r\n            // Lê os nomes das cidades a partir de um arquivo CSV\r\n            String[] cidadesDisponíveis = lerNomesCidadesDoCSV(\"Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv\");\r\n\r\n            // Exibe as cidades disponíveis para o usuário\r\n            System.out.println(\"Cidades disponíveis:\");\r\n            for (String cidade : cidadesDisponíveis) {\r\n                System.out.println(cidade);\r\n            }\r\n\r\n            Scanner scanner = new Scanner(System.in);\r\n\r\n            // Solicita ao usuário que selecione as cidades de origem e destino\r\n            System.out.print(\"Selecione a primeira cidade: \");\r\n            String cidadeOrigem = scanner.nextLine();\r\n            System.out.print(\"Selecione a segunda cidade: \");\r\n            String cidadeDestino = scanner.nextLine();\r\n\r\n            // Cria uma requisição à API do Google Maps para calcular a distância entre as cidades\r\n            DistanceMatrixApiRequest requisicao = DistanceMatrixApi.newRequest(contexto);\r\n            DistanceMatrix matrizDistancia = requisicao.origins(cidadeOrigem)\r\n                    .destinations(cidadeDestino)\r\n                    .await();\r\n\r\n            // Obtém a distância entre as cidades e a exibe de forma legível\r\n            Distance distancia = matrizDistancia.rows[0].elements[0].distance;\r\n            System.out.println(\"Distância entre \" + cidadeOrigem + \" e \" + cidadeDestino + \": \" + distancia.humanReadable);\r\n\r\n            System.out.println(\"Agora, vamos calcular o custo da viagem:\");\r\n\r\n            // Solicita ao usuário que selecione o tamanho do caminhão\r\n            System.out.println(\"Selecione o tamanho do caminhão: \");\r\n            System.out.println(\"1 - Pequeno\");\r\n            System.out.println(\"2 - Médio\");\r\n            System.out.println(\"3 - Grande\");\r\n            int opcaoTamanho = scanner.nextInt();\r\n\r\n            TamanhoVeiculo tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO; // Tamanho padrão (pequeno)\r\n\r\n            switch (opcaoTamanho) {\r\n                case 1:\r\n                    tamanhoVeiculoSelecionado = TamanhoVeiculo.PEQUENO;\r\n                    break;\r\n                case 2:\r\n                    tamanhoVeiculoSelecionado = TamanhoVeiculo.MEDIO;\r\n                    break;\r\n                case 3:\r\n                    tamanhoVeiculoSelecionado = TamanhoVeiculo.GRANDE;\r\n                    break;\r\n                default:\r\n                    System.out.println(\"Opção inválida. Usando caminhão pequeno por padrão.\");\r\n            }\r\n\r\n            // Converte a distância da viagem de metros para quilômetros\r\n            double distanciaViagem = distancia.inMeters / 1000.0;\r\n\r\n            // Cria um objeto de caminhão com base no tamanho selecionado\r\n            Caminhao caminhao = criarVeiculo(tamanhoVeiculoSelecionado);\r\n\r\n            // Calcula o custo da viagem\r\n            double custo = caminhao.getPrecoPorKm() * distanciaViagem;\r\n\r\n            // Formata o custo como valor em Reais (R$) com duas casas decimais\r\n            DecimalFormat df = new DecimalFormat(\"###,###.00\");\r\n            String valorFormatado = \"R$\" + df.format(custo);\r\n\r\n            // Exibe o custo da viagem com o tamanho do caminhão selecionado\r\n            System.out.println(\"Custo da viagem com caminhão \" + tamanhoVeiculoSelecionado + \": \" + valorFormatado);\r\n\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    // Função para ler os nomes das cidades a partir de um arquivo CSV\r\n    private static String[] lerNomesCidadesDoCSV(String caminhoArquivoCSV) throws IOException {\r\n        String[] cidades = null;\r\n        try (BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivoCSV))) {\r\n            String linha;\r\n            if ((linha = leitor.readLine()) != null) {\r\n                // Divide a linha do arquivo CSV em nomes de cidades usando ';' como delimitador\r\n                cidades = linha.split(\";\");\r\n            }\r\n        }\r\n        return cidades;\r\n    }\r\n\r\n    // Função para criar um objeto de caminhão com base no tamanho selecionado\r\n    private static Caminhao criarVeiculo(TamanhoVeiculo tamanhoVeiculo) {\r\n        switch (tamanhoVeiculo) {\r\n            case PEQUENO:\r\n                return new CaminhaoPequeno();\r\n            case MEDIO:\r\n                return new CaminhaoMedio();\r\n            case GRANDE:\r\n                return new CaminhaoGrande();\r\n            default:\r\n                return new CaminhaoPequeno(); // Usando caminhão pequeno por padrão.\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java b/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java	(date 1697425293843)
+@@ -2,6 +2,7 @@
+ 
+ 
+ import Veiculo.*;
++import produtos.*;
+ import com.google.maps.*;
+ import com.google.maps.model.*;
+ 
+@@ -11,9 +12,12 @@
+ import java.text.DecimalFormat;
+ public class Main {
+     public static void main(String[] args) {
++
++
+         // Inicialização do contexto da API do Google Maps com a chave de autenticação
+         GeoApiContext contexto = new GeoApiContext.Builder().apiKey("AIzaSyDbyxgnL0gIjRLqjZFImKWlQHLgF2D08ms").build();
+ 
++
+         try {
+             // Lê os nomes das cidades a partir de um arquivo CSV
+             String[] cidadesDisponíveis = lerNomesCidadesDoCSV("Projeto-Teste-BlocoDeNotas/DistanciasCidadesCSV.csv");
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"96b455d8-2eb5-4230-a35b-f2ef10e514b2\" name=\"Changes\" comment=\"\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand />\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Rebase.Settings\">\r\n    <option name=\"NEW_BASE\" value=\"origin/dev\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <favorite-branches>\r\n      <branch-storage>\r\n        <map>\r\n          <entry type=\"LOCAL\">\r\n            <value>\r\n              <list>\r\n                <branch-info repo=\"$PROJECT_DIR$\" source=\"dev\" />\r\n              </list>\r\n            </value>\r\n          </entry>\r\n        </map>\r\n      </branch-storage>\r\n    </favorite-branches>\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"dev\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;vaguinhu&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">\r\n    <option name=\"selectedUrlAndAccountId\">\r\n      <UrlAndAccount>\r\n        <option name=\"accountId\" value=\"8b7f498b-5908-45c7-92e5-3d605327abf7\" />\r\n        <option name=\"url\" value=\"https://github.com/FBerteli/Projeto-Revisao-BlocoDeNotas.git\" />\r\n      </UrlAndAccount>\r\n    </option>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2WggWWd8tcYOt3I46uqmcIv8Jtf\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;interface-usuario&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\vag\\Documents\\Projeto-Revisao-BlocoDeNotas\\Projeto-Teste-BlocoDeNotas\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"96b455d8-2eb5-4230-a35b-f2ef10e514b2\" name=\"Changes\" comment=\"\" />\r\n      <created>1697159669092</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1697159669092</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1697295230921</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1697295230921</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.\" />\r\n    <MESSAGE value=\"Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic\" NAME=\"Projeto-Teste-BlocoDeNotas Coverage Results\" MODIFIED=\"1697161859407\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$CalculadorDistancia.ic\" NAME=\"CalculadorDistancia Coverage Results\" MODIFIED=\"1697163064142\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\">\r\n      <FILTER>Cidade.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$CalculoDistancia.ic\" NAME=\"CalculoDistancia Coverage Results\" MODIFIED=\"1697165409939\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\">\r\n      <FILTER>Cidade.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/Projeto_Teste_BlocoDeNotas$Main.ic\" NAME=\"Main Coverage Results\" MODIFIED=\"1697243683932\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\">\r\n      <FILTER>org.example.*</FILTER>\r\n    </SUITE>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/.idea/workspace.xml	(date 1697420891258)
+@@ -4,7 +4,32 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="96b455d8-2eb5-4230-a35b-f2ef10e514b2" name="Changes" comment="" />
++    <list default="true" id="96b455d8-2eb5-4230-a35b-f2ef10e514b2" name="Changes" comment="Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv.">
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_21_23__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_21_23__Changes_.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_03__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_03__Changes_.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_59__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_10_2023_22_59__Changes_.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem$1.class.uniqueId7" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem.class.uniqueId5" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao$1.class.uniqueId2" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao.class.uniqueId3" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoGrande.class.uniqueId1" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoMedio.class.uniqueId6" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoPequeno.class.uniqueId9" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Main$1.class.uniqueId4" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Main.class.uniqueId8" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Veiculo.class.uniqueId0" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/org/Main/Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -53,7 +78,7 @@
+     </favorite-branches>
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+       <map>
+-        <entry key="$PROJECT_DIR$" value="dev" />
++        <entry key="$PROJECT_DIR$" value="main" />
+       </map>
+     </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+@@ -83,14 +108,14 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;interface-usuario&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++    "git-widget-placeholder": "interface-usuario"
+   }
+-}</component>
++}]]></component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
+       <recent name="C:\Users\vag\Documents\Projeto-Revisao-BlocoDeNotas\Projeto-Teste-BlocoDeNotas" />
+@@ -105,21 +130,11 @@
+       <option name="presentableId" value="Default" />
+       <updated>1697159669092</updated>
+     </task>
+-    <task id="LOCAL-00001" summary="Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;">
+-      <option name="closed" value="true" />
+-      <created>1697295230921</created>
+-      <option name="number" value="00001" />
+-      <option name="presentableId" value="LOCAL-00001" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1697295230921</updated>
+-    </task>
+-    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv." />
+-    <MESSAGE value="Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Alteração da classe Main.java;&#10;Adição da classe CalculoViagem.java, porem a mesma pode não tem uso;&#10;Funcionalidade calculo dos caminhões com relação a distância entre duas cidades;&#10;Refatoração e das classes, Caminhao, CaminhaoGrande, CaminhaoMedio,e CaminhaoPequeno;&#10;Adição das classes Veiculo e TamanhoVeiculo;" />
++    <option name="LAST_COMMIT_MESSAGE" value="Adição do package Cidade,&#10;Adição da classe CalculadorDistancia.java,&#10;Adição do arquivo csv DistanciasCidadesCSV.csv,&#10;Implementação das depencias do google maps e da leitura do csv." />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/Projeto_Teste_BlocoDeNotas$Projeto_Teste_BlocoDeNotas.ic" NAME="Projeto-Teste-BlocoDeNotas Coverage Results" MODIFIED="1697161859407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+Index: Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package produtos;\r\n\r\npublic class ListaProdutos {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java
+--- a/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java	(revision 1afef6de1d7a937bf17154ac7537740fee208bd6)
++++ b/Projeto-Teste-BlocoDeNotas/src/main/java/produtos/ListaProdutos.java	(date 1697419554604)
+@@ -1,4 +1,10 @@
+ package produtos;
+ 
+-public class ListaProdutos {
+-}
++// Classe base para os produtos
++public abstract class ListaProdutos {
++    protected double peso;  // Peso em quilogramas
++
++    public double getPeso() {
++        return peso;
++    }
++}
+\ No newline at end of file

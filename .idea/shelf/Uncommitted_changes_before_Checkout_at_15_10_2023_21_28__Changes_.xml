@@ -1,0 +1,24 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_15_10_2023_21_28_[Changes]" date="1697416134089" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_10_2023_21_28_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 15/10/2023 21:28 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_10_2023_21_28_[Changes]/fileHashes.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_10_2023_21_28_[Changes]/executionHistory.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_10_2023_21_28_[Changes]/buildOutputCleanup.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_10_2023_21_28_[Changes]/file-system.probe" />
+  </binary>
+</changelist>

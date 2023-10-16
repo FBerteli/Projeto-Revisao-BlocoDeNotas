@@ -1,0 +1,94 @@
+<changelist name="Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]" date="1697425441662" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 16/10/2023 00:03 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem.class.uniqueId5" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Main$1.class.uniqueId4" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Main.class.uniqueId8" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/fileHashes.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoMedio.class.uniqueId6" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/executionHistory.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao.class.uniqueId3" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Veiculo.class.uniqueId0" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/buildOutputCleanup.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/executionHistory/executionHistory.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/executionHistory.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/resourceHashesCache.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/resourceHashesCache.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoGrande.class.uniqueId1" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CalculoViagem$1.class.uniqueId7" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/Caminhao$1.class.uniqueId2" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/file-system.probe" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/file-system.probe" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/compileTransaction/stash-dir/CaminhaoPequeno.class.uniqueId9" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/.gradle/8.2/fileHashes/fileHashes.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/fileHashes.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" />
+    <option name="AFTER_PATH" value="Projeto-Teste-BlocoDeNotas/build/tmp/compileJava/previous-compilation-data.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_10_2023_00_03_[Changes]/previous-compilation-data.bin" />
+  </binary>
+</changelist>
