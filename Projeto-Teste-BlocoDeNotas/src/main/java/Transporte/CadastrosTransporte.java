@@ -50,9 +50,9 @@ public class CadastrosTransporte extends ListaDeProdutos {
 
     // Calcula o custo médio por produto e exibe os resultados
     public void calculaCustoMedioPorProduto(Map<String, Double> selectProducts, Map<String, Integer> productsQuantity, ArrayList<Double> precos) {
-        for (Map.Entry<String, Double> chaveAtual : selectProducts.entrySet()) {
-            if (chaveAtual.getKey() != null && chaveAtual.getValue() != null) {
-                double precoMedioPorProduto = precos.get(0) / productsQuantity.get(chaveAtual.getKey());
+        for (Map.Entry<String, Integer> chaveAtual : productsQuantity.entrySet()) {
+            if (selectProducts.containsKey(chaveAtual.getKey())) {
+                double precoMedioPorProduto = precos.get(0) / chaveAtual.getValue().intValue();
                 System.out.println("O preço médio por " + chaveAtual.getKey() + " é de : R$" + formatoDecimal.format(precoMedioPorProduto));
             }
         }
