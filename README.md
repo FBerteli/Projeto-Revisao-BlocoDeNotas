@@ -43,7 +43,12 @@ Aqui está os futuros programadores que contribuíram para o desenvolvimento do 
     - Integração e criação da área de testes no projeto.
 
 3. [Josué Silva](https://github.com/josuedevgit)
-   * Contribuição: *Em andamento*
+   * Contribuição:
+     - Organização do Trello
+     - Estrutura de branchs
+     - Aplicação de métodos de testes
+     - Interação com usuário no prompt [Codigo MAIN]
+     - Apoio com o uso do git e github
 
 4. [Pedro Lobato Toralles](https://github.com/PedroLobatoToralles)
    * Contribuição:
