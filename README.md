@@ -31,7 +31,7 @@ Aqui está os futuros programadores que contribuíram para o desenvolvimento do 
 1. [Arthur Almeida da Fonseca](https://github.com/Vaniteux2006)
    * Contribuição: *Em andamento* 
 
-2. [Felipe Berteli dos Santos](https://github.com/FBerteli)
+2. [Felipe Berteli dos Santos](https://github.com/FBerteli) SCRUM E DEV
    * Contribuição:
     - Criação das classes dos caminhões.
     - Criação e desenvolvimento do prompt do usuário.
@@ -42,7 +42,7 @@ Aqui está os futuros programadores que contribuíram para o desenvolvimento do 
     - Contribui fornecendo algumas ajudas com comandos do git.
     - Integração e criação da área de testes no projeto.
 
-3. [Josué Silva](https://github.com/josuedevgit)
+3. [Josué Silva](https://github.com/josuedevgit) QA e DEV
    * Contribuição:
      - Organização do Trello
      - Estrutura de branchs
@@ -50,7 +50,7 @@ Aqui está os futuros programadores que contribuíram para o desenvolvimento do 
      - Interação com usuário no prompt [Codigo MAIN]
      - Apoio com o uso do git e github
 
-4. [Pedro Lobato Toralles](https://github.com/PedroLobatoToralles)
+4. [Pedro Lobato Toralles](https://github.com/PedroLobatoToralles) PO e DEV
    * Contribuição:
      - Confecção do Discord
      - Criação do Trello
@@ -62,5 +62,11 @@ Aqui está os futuros programadores que contribuíram para o desenvolvimento do 
      - Sugestões de lógica
      - Mapeamento de ideias
 
-5. [Vagner Juliano](https://github.com/vaguinhu)
-   * Contribuição: *Em andamento* 
+5. [Vagner Juliano](https://github.com/vaguinhu) - DEV
+   * Contribuição: 
+   - Desenvolvimento do prompt do usuário
+   - Desenvolvimento da funcionalidade 1 e 2
+   - Criação da Classe CadastrosTransporte
+   - Criação da Classe DistanciaCidades
+   - Refatoração de código das funcionalidades
+   - Refatoração das classes

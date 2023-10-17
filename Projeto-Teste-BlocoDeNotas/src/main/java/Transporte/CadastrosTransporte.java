@@ -23,6 +23,7 @@ public class CadastrosTransporte extends ListaDeProdutos {
     // Calcula o custo total com base na lista de preços
     public double calculaCustoTotal(ArrayList precosTotais) {
         double precoTotal = 0;
+        //Converte o objeto de preço para um valor double e adiciona ao preço total.
         for (Object preco : precosTotais) {
             precoTotal += (double) preco;
         }
