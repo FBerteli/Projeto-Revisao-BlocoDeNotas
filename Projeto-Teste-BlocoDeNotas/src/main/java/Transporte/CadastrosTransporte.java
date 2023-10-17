@@ -6,56 +6,89 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class CadastrosTransporte extends ListaDeProdutos{
+public class CadastrosTransporte extends ListaDeProdutos {
+    // Variáveis para armazenar estatísticas de transporte
     public int trechos = 0;
+    public int caminhoesPequenos = 0;
+    public int caminhoesMedios = 0;
+    public int caminhoesGrandes = 0;
+    public double custoPorCaminhoesPequenos;
+    public double custoPorCaminhoesMedios;
+    public double custoPorCaminhoesGrandes;
     public ArrayList<Double> distanciaDeTrechos = new ArrayList<>();
     public ArrayList<Double> precosTotais = new ArrayList<>();
-    public DecimalFormat df = new DecimalFormat("0.00");
-
     public ArrayList<Double> precosAdicionados = new ArrayList<>();
+    DecimalFormat formatoDecimal = new DecimalFormat("###.##");
 
-    public double calculaCustoTotal(ArrayList<Double> precosTotais) {
-        return precosTotais.stream().mapToDouble(Double::doubleValue).sum();
+    // Calcula o custo total com base na lista de preços
+    public double calculaCustoTotal(ArrayList precosTotais) {
+        double precoTotal = 0;
+        for (Object preco : precosTotais) {
+            precoTotal += (double) preco;
+        }
+        return precoTotal;
     }
 
-    public double calculaDistanciaTotalDeTrechos(ArrayList<Double> distanciaDeTrechos) {
-        return distanciaDeTrechos.stream().mapToDouble(Double::doubleValue).sum();
+    // Calcula a distância total de todos os trechos
+    public double calculaDistanciaTotalDeTrechos(ArrayList distanciaDeTrechos) {
+        double distanciaTotal = 0;
+        for (Object distanciaDeTrecho : distanciaDeTrechos) {
+            distanciaTotal += (double) distanciaDeTrecho;
+        }
+        return distanciaTotal;
     }
 
+    // Calcula o custo médio por trecho
     public double calculaCustoPorTrecho(int numeroDeTrechos) {
-        return calculaCustoTotal(precosTotais) / numeroDeTrechos;
+        return calculaCustoTotal(this.precosTotais) / numeroDeTrechos;
     }
 
+    // Calcula o custo médio por quilômetro
     public double calculaCustoMedioPorKm() {
-        return calculaCustoTotal(precosTotais) / calculaDistanciaTotalDeTrechos(distanciaDeTrechos);
+        return calculaCustoTotal(this.precosTotais) / calculaDistanciaTotalDeTrechos(this.distanciaDeTrechos);
     }
 
-    public void calculaCustoMedioPorProduto(Map<String, Double> selectProducts, Map<String, Integer> productsQuantity, ArrayList<Double> precosAdicionados) {
-        for (Map.Entry<String, Double> entry : selectProducts.entrySet()) {
-            String produto = entry.getKey();
-            double precoProduto = entry.getValue();
-            int quantidadeProduto = productsQuantity.get(produto);
-            double precoMedioPorProduto = precoProduto / quantidadeProduto;
-            precosTotais.add(precoMedioPorProduto);
-            System.out.println("O preço médio por " + produto + " é de: R$" + df.format(precoMedioPorProduto));
+    // Calcula o custo médio por produto e exibe os resultados
+    public void calculaCustoMedioPorProduto(Map<String, Double> selectProducts, Map<String, Integer> productsQuantity, ArrayList<Double> precos) {
+        for (Map.Entry<String, Double> chaveAtual : selectProducts.entrySet()) {
+            if (chaveAtual.getKey() != null && chaveAtual.getValue() != null) {
+                double precoMedioPorProduto = precos.get(0) / productsQuantity.get(chaveAtual.getKey());
+                System.out.println("O preço médio por " + chaveAtual.getKey() + " é de : R$" + formatoDecimal.format(precoMedioPorProduto));
+            }
         }
     }
 
-
+    // Calcula o total de itens transportados e exibe o resultado
     public void contaTotalDeItensTransportados(Map<String, Integer> productsQuantity) {
-        int totalDeItens = productsQuantity.values().stream().mapToInt(Integer::intValue).sum();
-        System.out.println("Total de itens transportados: " + totalDeItens);
+        int totalDeItens = 0;
+        for (Map.Entry<String, Integer> chaveAtual : productsQuantity.entrySet()) {
+            totalDeItens += chaveAtual.getValue();
+        }
+        System.out.println("Itens transportados: " + totalDeItens);
     }
 
+    // Calcula o custo total em caminhões pequenos com base na distância
+    public double calculaCustoPorCaminhaoPequeno(double distance) {
+        return (this.caminhoesPequenos * distance) * 5.83;
+    }
+
+    // Calcula o custo total em caminhões médios com base na distância
+    public double calculaCustoPorCaminhaoMedio(double distance) {
+        return (this.caminhoesMedios * distance) * 13.42;
+    }
+
+    // Calcula o custo total em caminhões grandes com base na distância
+    public double calculaCustoPorCaminhaoGrande(double distance) {
+        return (this.caminhoesGrandes * distance) * 29.21;
+    }
+
+    // Exibe as estatísticas de transporte
     public void exibeEstatisticas() {
-        System.out.println("Preço total: R$" + df.format(calculaCustoTotal(precosTotais)));
-        System.out.println("Custo médio por KM: R$" + df.format(calculaCustoMedioPorKm()));
-        System.out.println("Custo por trecho: R$" + df.format(calculaCustoPorTrecho( trechos )));
-    }
-
-    public void atualizarDados(double distancia, double valor) {
-        distanciaDeTrechos.add(distancia);
-        precosTotais.add(valor);
-        precosAdicionados.add(valor); // Adicione o valor também a esta lista, se necessário.
+        System.out.println("Preço total: R$ " + calculaCustoTotal(precosTotais));
+        System.out.println("Custo médio por KM: R$" + calculaCustoMedioPorKm());
+        System.out.println("Custo por trecho: R$" + calculaCustoPorTrecho(trechos));
+        System.out.println("Caminhões pequenos utilizados: " + this.caminhoesPequenos);
+        System.out.println("Caminhões médios utilizados: " + this.caminhoesMedios);
+        System.out.println("Caminhões grandes utilizados: " + this.caminhoesGrandes);
     }
 }
