@@ -46,7 +46,16 @@ Aqui está os futuros programadores que contribuíram para o desenvolvimento do 
    * Contribuição: *Em andamento*
 
 4. [Pedro Lobato Toralles](https://github.com/PedroLobatoToralles)
-   * Contribuição: *Em andamento* 
+   * Contribuição:
+     - Confecção do Discord
+     - Criação do Trello
+     - Agendamento e condução de reuniões
+     - Desenvolvimento da funcionalidade 2
+     - Desenvolvimento do prompt do usuário
+     - Desenvolvimento dos produtos
+     - Criação de relatórios das reuniões
+     - Sugestões de lógica
+     - Mapeamento de ideias
 
 5. [Vagner Juliano](https://github.com/vaguinhu)
    * Contribuição: *Em andamento* 
