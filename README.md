@@ -29,7 +29,11 @@ git clone https://github.com/seu-usuario/nome-do-repositorio.git
 Aqui está os futuros programadores que contribuíram para o desenvolvimento do código-fonte deste projeto.
 
 1. [Arthur Almeida da Fonseca](https://github.com/Vaniteux2006)
-   * Contribuição: *Em andamento* 
+   * Contribuição:
+     - Criação de Validações
+     - Ajuda na criação do Trello
+     - Aplicação do método de Testes e Experiência de Usuário
+     - Ajuda no Mapeamento de Ideias
 
 2. [Felipe Berteli dos Santos](https://github.com/FBerteli) SCRUM E DEV
    * Contribuição:
