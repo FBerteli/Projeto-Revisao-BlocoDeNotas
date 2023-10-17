@@ -28,7 +28,7 @@ git clone https://github.com/seu-usuario/nome-do-repositorio.git
 ## Equipe "Bloco de Notas"
 Aqui está os futuros programadores que contribuíram para o desenvolvimento do código-fonte deste projeto.
 
-1. [Arthur Almeida da Fonseca](https://github.com/Vaniteux2006)
+1. [Arthur Almeida da Fonseca](https://github.com/Vaniteux2006) DEV
    * Contribuição:
      - Criação de Validações
      - Ajuda na criação do Trello
@@ -74,3 +74,9 @@ Aqui está os futuros programadores que contribuíram para o desenvolvimento do 
    - Criação da Classe DistanciaCidades
    - Refatoração de código das funcionalidades
    - Refatoração das classes
+
+COMO FOI TRABALHAR EM GRUPO?
+Adoramos trabalhar em grupo, nosso grupo se deu muito bem e tivemos certa sincronia, nunca haviamos trabalhado assim em grupo antes.
+
+COMO FOI TRABALHAR USANDO GIT?
+Foi desafiador trabalhar pela primeira vez em equipe usando github, não conhecíamos os limites do programa, passamos por alguns problemas, mas no final deu tudo certo.
