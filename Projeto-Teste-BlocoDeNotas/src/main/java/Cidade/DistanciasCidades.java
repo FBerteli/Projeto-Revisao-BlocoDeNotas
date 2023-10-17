@@ -13,7 +13,7 @@ public class DistanciasCidades {
         carregaMatrizDeDistancias(caminhoCSV);
     }
 
-    private void carregaMatrizDeDistancias(String caminhoCSV) {
+    public void carregaMatrizDeDistancias(String caminhoCSV) {
         try (BufferedReader br = new BufferedReader(new FileReader(caminhoCSV))) {
             String linha;
             String[] cidades = null;
